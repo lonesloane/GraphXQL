@@ -1,0 +1,11 @@
+<person xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://graph.x.ql" xmlns:gxql="http://graph.x.ql" xsi:type="gxql:Foe" xsi:schemaLocation="/graphxql/entities/person.xsd">
+    <id>4</id>
+    <name>William</name>
+    <height>180</height>
+    <appearsIn>Return of the Jedi</appearsIn>
+    <accomplices>
+        <id>2</id>
+        <id>3</id>
+        <id>5</id>
+    </accomplices>
+</person>

@@ -1,0 +1,19 @@
+<delegation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://graph.x.ql" xsi:type="gxql:Delegation" xsi:schemaLocation="/graphxql/delegation.xsd">
+    <name>Valinor</name>
+    <location>Middle Earth</location>
+    <membership-date>01/01/00</membership-date>
+    <members>
+        <person>
+            <id>2</id>
+        </person>
+        <person>
+            <id>3</id>
+        </person>
+        <person>
+            <id>4</id>
+        </person>
+        <person>
+            <id>5</id>
+        </person>
+    </members>
+</delegation>

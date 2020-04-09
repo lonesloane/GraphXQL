@@ -1,0 +1,10 @@
+<person xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://graph.x.ql" xsi:type="gxql:Person" xsi:schemaLocation="/graphxql/person.xsd">
+    <name>Jesse</name>
+    <height>180</height>
+    <appearsIn>Daisy Town</appearsIn>
+    <friends>
+        <person>
+            <id>2</id>
+        </person>
+    </friends>
+</person>

@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://graph.x.qls" xmlns:gxqls="http://graph.x.qls">
+
+  <!--
+  TODO: 
+  - implement support for mandatory (non-nullable) type fields (i.e. Type!)
+  - Improve support for list type fields (i.e. [Type]) => constrain kind to Scalar or List, change name (kind is meaningless)
+-->
+  <xs:complexType name="Schema">
+    <xs:all>
+
+      <xs:element name="description" type="xs:string" minOccurs="0" />
+
+      <xs:element name="Query" type="gxqls:Query" />
+
+      <xs:element name="types">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="InterfaceType" type="gxqls:Type" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="Type" type="gxqls:Type" maxOccurs="unbounded" />
+            <xs:element name="UnionType" type="gxqls:UnionType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="EnumType" type="gxqls:EnumType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="InputType" type="gxqls:InputType" minOccurs="0" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="Mutation" type="gxqls:Mutation" minOccurs="0" />
+
+      <!-- <xs:element name="Subscription" type="gxqls:Subscription"  minOccurs="0"/> -->
+
+      <xs:element name="directives" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Directive" type="gxqls:Directive" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="scalars" minOccurs="0">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="Int" type="gxqls:Int" minOccurs="0" />
+            <xs:element name="Float" type="gxqls:Float" minOccurs="0" />
+            <xs:element name="String" type="gxqls:String" minOccurs="0" />
+            <xs:element name="Boolean" type="gxqls:Boolean" minOccurs="0" />
+            <xs:element name="ID" type="gxqls:ID" minOccurs="0" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="Query">
+    <xs:all>
+      <xs:element name="description" type="xs:string" minOccurs="0" />
+      <xs:element name="fields">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="field" type="gxqls:Field" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="Field">
+    <xs:all>
+      <xs:element name="description" type="xs:string" minOccurs="0" />
+      <xs:element name="Type" type="gxqls:Type" minOccurs="1" />
+      <xs:element name="args" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Arg" type="gxqls:Arg" minOccurs="1" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="nullable" type="xs:boolean" use="optional" />
+    <xs:attribute name="default" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="Arg">
+    <xs:all>
+      <xs:element name="description" type="xs:string" minOccurs="0" />
+      <xs:element name="Type" type="gxqls:Type" minOccurs="1" />
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="nullable" type="xs:boolean" use="optional" />
+    <xs:attribute name="default" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <!-- <xs:complexType name="InterfaceType">
+    <xs:sequence>
+      <xs:element name="description" type="xs:string" minOccurs="0" />
+      <xs:element name="fields" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="field" type="gxqls:Field" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="kind" type="xs:string" use="optional" />
+  </xs:complexType> -->
+
+  <xs:complexType name="Type">
+    <xs:sequence>
+      <xs:element name="interfaces" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Type" type="gxqls:Type" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="description" type="xs:string" minOccurs="0" />
+      <xs:element name="fields" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="field" type="gxqls:Field" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="kind" type="xs:string" use="optional" />
+    <!-- TODO: fix extension from InterfaceType -->
+    <!-- <xs:complexContent>
+      <xs:extension base="gxqls:InterfaceType">
+        <xs:sequence>
+          <xs:element name="interfaces" minOccurs="0">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="Type" type="gxqls:Type" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent> -->
+  </xs:complexType>
+
+  <xs:complexType name="UnionType">
+    <xs:all>
+      <xs:element name="types" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Type" type="gxqls:Type" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="InputType">
+    <xs:all>
+      <xs:element name="fields" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="field" type="gxqls:InputField" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="kind" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="InputField">
+    <xs:all>
+      <xs:element name="Type" type="gxqls:InputType" minOccurs="1" />
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="nullable" type="xs:boolean" use="optional" />
+    <xs:attribute name="default" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="EnumType">
+    <xs:all>
+      <xs:element name="description" type="xs:string" minOccurs="0" />
+      <xs:element name="values" minOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="value" type="gxqls:EnumValue" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="EnumValue">
+    <xs:all>
+      <xs:element name="description" type="xs:string" minOccurs="0" />
+    </xs:all>
+    <xs:attribute name="label" type="xs:string" use="required" />
+    <xs:attribute name="value" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="Mutation">
+    <xs:all>
+      <xs:element name="fields">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="field" type="gxqls:Field" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <!-- <xs:complexType name="GraphQLSubscription">
+  </xs:complexType> -->
+
+  <xs:complexType name="Directive">
+    <xs:all>
+      <xs:element name="locations" minOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="location" type="gxqls:DirectiveLocation" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="args" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Arg" type="gxqls:Arg" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:simpleType name="DirectiveLocation">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="QUERY" />
+      <xs:enumeration value="MUTATION" />
+      <xs:enumeration value="SUBSCRIPTION" />
+      <xs:enumeration value="FIELD" />
+      <xs:enumeration value="FRAGMENT-DEFINITION" />
+      <xs:enumeration value="FRAGMENT-SPREAD" />
+      <xs:enumeration value="INLINE-FRAGMENT" />
+      <xs:enumeration value="VARIABLE-DEFINITION" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="Scalar"></xs:complexType>
+
+  <xs:complexType name="Int">
+    <xs:complexContent>
+      <xs:extension base="gxqls:Scalar" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Float">
+    <xs:complexContent>
+      <xs:extension base="gxqls:Scalar" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="String">
+    <xs:complexContent>
+      <xs:extension base="gxqls:Scalar" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Boolean">
+    <xs:complexContent>
+      <xs:extension base="gxqls:Scalar" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ID">
+    <xs:complexContent>
+      <xs:extension base="gxqls:Scalar" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:element name="Schema" type="gxqls:Schema" />
+  <xs:element name="Type" type="gxqls:Type" />
+  <xs:element name="InterfaceType" type="gxqls:Type" />
+  <xs:element name="Query" type="gxqls:Query" />
+  <xs:element name="Mutation" type="gxqls:Mutation" />
+
+</xs:schema>

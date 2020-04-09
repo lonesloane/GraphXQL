@@ -1,0 +1,13 @@
+<Schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://graph.x.qls" xmlns:gxqls="http://graph.x.qls">
+
+    <Query name="Query">
+        <fields>
+
+            <field name="foo">
+                <Type name="String" />
+            </field>
+
+        </fields>
+    </Query>
+
+</Schema>

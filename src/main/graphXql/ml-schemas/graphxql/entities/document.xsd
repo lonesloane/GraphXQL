@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://graph.x.ql" xmlns:gxql="http://graph.x.ql">
+
+    <xs:complexType name="Document">
+        <xs:choice maxOccurs="unbounded">
+            <xs:element name="title" type="xs:string" minOccurs="1" />
+            <xs:element name="author" type="xs:string" minOccurs="0" />
+            <xs:element name="publication-date" type="xs:string" minOccurs="0" />
+            <xs:element name="cote" type="xs:string" minOccurs="1" />
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:element name="document" type="gxql:Document"></xs:element>
+</xs:schema>

@@ -1,0 +1,16 @@
+<person xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://graph.x.ql" xsi:type="gxql:Foe" xsi:schemaLocation="/graphxql/person.xsd">
+    <name>Jack</name>
+    <height>180</height>
+    <appearsIn>Return of the Jedi</appearsIn>
+    <accomplices>
+        <person>
+            <id>2</id>
+        </person>
+        <person>
+            <id>4</id>
+        </person>
+        <person>
+            <id>5</id>
+        </person>
+    </accomplices>
+</person>

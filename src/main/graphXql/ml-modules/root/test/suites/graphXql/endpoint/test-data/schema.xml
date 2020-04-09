@@ -1,0 +1,637 @@
+<Schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://graph.x.qls" xmlns:gxqls="http://graph.x.qls">
+
+    <description>Schema pretending to cover all possible test scenarios</description>
+
+    <Query name="Query">
+        <fields>
+
+            <field name="person">
+                <Type name="Person" />
+                <args>
+                    <Arg name="id" nullable="false">
+                        <Type name="Int" kind="Scalar" />
+                    </Arg>
+                </args>
+            </field>
+
+            <field name="human">
+                <Type name="Human" />
+                <args>
+                    <Arg name="id" nullable="false">
+                        <Type name="Int" kind="Scalar" />
+                    </Arg>
+                </args>
+            </field>
+
+            <field name="hero">
+                <Type name="Hero" />
+                <args>
+                    <Arg name="id" nullable="false">
+                        <Type name="Int" kind="Scalar" />
+                    </Arg>
+                </args>
+            </field>
+
+            <field name="foe">
+                <Type name="Foe" />
+                <args>
+                    <Arg name="id" nullable="false">
+                        <Type name="Int" kind="Scalar" />
+                    </Arg>
+                </args>
+            </field>
+
+            <field name="heroOrFoe">
+                <Type name="HeroOrFoe" />
+            </field>
+
+            <field name="pet">
+                <Type name="Pet" />
+            </field>
+
+            <field name="horse">
+                <Type name="Horse" />
+            </field>
+
+            <field name="event">
+                <Type name="Event" />
+                <args>
+                    <Arg name="id" nullable="false">
+                        <Type name="Int" kind="Scalar" />
+                    </Arg>
+                </args>
+            </field>
+
+            <field name="document">
+                <Type name="Document" />
+                <args>
+                    <Arg name="id" nullable="false">
+                        <Type name="Int" kind="Scalar" />
+                    </Arg>
+                </args>
+            </field>
+
+            <field name="delegation">
+                <Type name="Delegation" />
+                <args>
+                    <Arg name="id" nullable="false">
+                        <Type name="Int" kind="Scalar" />
+                    </Arg>
+                </args>
+            </field>
+
+            <field name="complicatedArgs">
+                <Type name="ComplicatedArgs" />
+            </field>
+
+        </fields>
+    </Query>
+
+    <Mutation name="Mutation">
+        <fields>
+            <field name="createParticipant">
+                <Type name="CreateParticipant" />
+                <args>
+                    <Arg name="id" nullable="false">
+                        <Type name="Int" kind="Scalar" />
+                    </Arg>
+                    <Arg name="participant" nullable="false">
+                        <Type name="String" kind="Scalar" />
+                    </Arg>
+                </args>
+            </field>
+        </fields>
+    </Mutation>
+
+    <types>
+
+        <InterfaceType name="Pet">
+            <fields>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="canSpeak">
+                    <args>
+                        <Arg name="inHisHead" nullable="false" default="true">
+                            <Type name="Boolean" kind="Scalar" />
+                        </Arg>
+                    </args>
+                    <Type name="Boolean" kind="Scalar" />
+                </field>
+                <field name="furColor">
+                    <Type name="FurColor" kind="Scalar" />
+                </field>
+                <field name="hasFurColor">
+                    <Type name="Boolean" kind="Scalar" />
+                    <args>
+                        <Arg name="furColor" nullable="false">
+                            <Type name="FurColor" kind="Scalar" />
+                        </Arg>
+                    </args>
+                </field>
+            </fields>
+        </InterfaceType>
+
+        <InterfaceType name="Human">
+            <description>A human character.</description>
+            <fields>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                    <description>The name of the human.</description>
+                </field>
+            </fields>
+        </InterfaceType>
+
+        <InterfaceType name="Person">
+            <interfaces>
+                <Type name="Human" />
+            </interfaces>
+            <fields>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="height">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="appearsIn">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="friends">
+                    <Type name="Person" kind="List" />
+                </field>
+                <field name="dog">
+                    <Type name="Dog" kind="Scalar" />
+                </field>
+                <field name="hasFriend">
+                    <args>
+                        <Arg name="id">
+                            <Type name="String" kind="Scalar" />
+                        </Arg>
+                    </args>
+                    <Type name="Boolean" kind="Scalar" />
+                </field>
+            </fields>
+        </InterfaceType>
+
+        <Type name="Dog">
+            <interfaces>
+                <Type name="Pet" />
+            </interfaces>
+            <fields>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="canSpeak">
+                    <args>
+                        <Arg name="inHisHead" nullable="false" default="true">
+                            <Type name="Boolean" kind="Scalar" />
+                        </Arg>
+                    </args>
+                    <Type name="Boolean" kind="Scalar" />
+                </field>
+                <field name="hasFurColor">
+                    <Type name="Boolean" kind="Scalar" />
+                    <args>
+                        <Arg name="furColor" nullable="false">
+                            <Type name="FurColor" kind="Scalar" />
+                        </Arg>
+                    </args>
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="Horse">
+            <interfaces>
+                <Type name="Pet" />
+            </interfaces>
+            <fields>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="canSpeak">
+                    <args>
+                        <Arg name="inHisHead">
+                            <Type name="Boolean" kind="Scalar" />
+                        </Arg>
+                    </args>
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="multipleRequired">
+                    <args>
+                        <Arg name="req1" nullable="false">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                        <Arg name="req2" nullable="false">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                    </args>
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="multipleOptional">
+                    <args>
+                        <Arg name="opt1">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                        <Arg name="opt2">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                    </args>
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="multipleOptAndReq">
+                    <args>
+                        <Arg name="req1" nullable="false">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                        <Arg name="req2" nullable="false">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                        <Arg name="opt1">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                        <Arg name="opt2">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                    </args>
+                    <Type name="String" kind="Scalar" />
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="Hero">
+            <interfaces>
+                <Type name="Human" />
+                <Type name="Person" />
+            </interfaces>
+            <description>The good guy.</description>
+            <fields>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="height">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="appearsIn">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="friends">
+                    <Type name="Person" kind="List" />
+                </field>
+                <field name="foes">
+                    <Type name="Person" kind="List" />
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="Foe">
+            <interfaces>
+                <Type name="Human" />
+                <Type name="Person" />
+            </interfaces>
+            <fields>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="height">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="appearsIn">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="friends">
+                    <Type name="Person" kind="List" />
+                </field>
+                <field name="accomplices">
+                    <Type name="Person" kind="List" />
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="Event">
+            <fields>
+                <field name="title">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="location">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="startDate">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="endDate">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="participants">
+                    <args>
+                        <Arg name="offset">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                        <Arg name="length">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                    </args>
+                    <Type name="Person" kind="List" />
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="Document">
+            <fields>
+                <field name="title">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="author">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="publicationDate">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="cote">
+                    <Type name="String" kind="Scalar" />
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="Delegation">
+            <fields>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="location">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="membershipDate">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="members">
+                    <args>
+                        <Arg name="sort" default="alpha">
+                            <Type name="String" kind="Scalar" />
+                        </Arg>
+                    </args>
+                    <Type name="Person" kind="List" />
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="ComplicatedArgs">
+            <fields>
+                <field name="intArgField">
+                    <Type name="String" kind="Scalar" />
+                    <args>
+                        <Arg name="intArg">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                    </args>
+                </field>
+                <field name="nonNullIntArgField">
+                    <Type name="String" kind="Scalar" />
+                    <args>
+                        <Arg name="nonNullIntArg" nullable="false">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                    </args>
+                </field>
+                <field name="stringArgField">
+                    <Type name="String" kind="Scalar" />
+                    <args>
+                        <Arg name="stringArg">
+                            <Type name="String" kind="Scalar" />
+                        </Arg>
+                    </args>
+                </field>
+                <field name="booleanArgField">
+                    <Type name="String" kind="Scalar" />
+                    <args>
+                        <Arg name="booleanArg">
+                            <Type name="Boolean" kind="Scalar" />
+                        </Arg>
+                    </args>
+                </field>
+                <field name="enumArgField">
+                    <Type name="String" kind="Scalar" />
+                    <args>
+                        <Arg name="enumArg">
+                            <Type name="FurColor" kind="Scalar" />
+                        </Arg>
+                    </args>
+                </field>
+                <field name="floatArgField">
+                    <Type name="String" kind="Scalar" />
+                    <args>
+                        <Arg name="floatArg">
+                            <Type name="Float" kind="Scalar" />
+                        </Arg>
+                    </args>
+                </field>
+                <field name="idArgField">
+                    <Type name="String" kind="Scalar" />
+                    <args>
+                        <Arg name="idArg">
+                            <Type name="ID" kind="Scalar" />
+                        </Arg>
+                    </args>
+                </field>
+                <field name="stringListArgField">
+                    <Type name="String" kind="Scalar" />
+                    <args>
+                        <Arg name="stringListArg">
+                            <Type name="String" kind="List" />
+                        </Arg>
+                    </args>
+                </field>
+                <field name="stringListNonNullArgField">
+                    <Type name="String" kind="Scalar" />
+                    <args>
+                        <Arg name="stringListNonNullArg" nullable="false">
+                            <Type name="String" kind="List" />
+                        </Arg>
+                    </args>
+                </field>
+                <field name="complexArgField">
+                    <Type name="String" kind="Scalar" />
+                    <args>
+                        <Arg name="complexArg">
+                            <Type name="ComplexInput" kind="Scalar" />
+                        </Arg>
+                    </args>
+                </field>
+                <field name="multipleReqs">
+                    <Type name="String" kind="Scalar" />
+                    <args>
+                        <Arg name="req1" nullable="false">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                        <Arg name="req2" nullable="false">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                    </args>
+                </field>
+                <field name="nonNullFieldWithDefault">
+                    <Type name="String" kind="Scalar" />
+                    <args>
+                        <Arg name="arg" nullable="false" default="0">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                    </args>
+                </field>
+                <field name="multipleOpts">
+                    <Type name="String" kind="Scalar" />
+                    <args>
+                        <Arg name="opt1" default="0">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                        <Arg name="opt2" default="0">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                    </args>
+                </field>
+                <field name="multipleOptAndReq">
+                    <Type name="String" kind="Scalar" />
+                    <args>
+                        <Arg name="req1" nullable="false">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                        <Arg name="req2" nullable="false">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                        <Arg name="opt1" default="0">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                        <Arg name="opt2" default="0">
+                            <Type name="Int" kind="Scalar" />
+                        </Arg>
+                    </args>
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="CreateParticipant">
+            <fields>
+                <field name="event">
+                    <Type name="Event" kind="scalar" />
+                    <args>
+                        <Arg name="id">
+                            <Type name="Int" kind="scalar" />
+                        </Arg>
+                    </args>
+                </field>
+            </fields>
+        </Type>
+
+        <!-- <UnionType name="DogOrHero">
+            <types>
+                <Type name="Human" />
+                <Type name="Dog" />
+            </types>
+        </UnionType> -->
+
+        <UnionType name="HeroOrFoe">
+            <types>
+                <Type name="Hero" />
+                <Type name="Foe" />
+            </types>
+        </UnionType>
+
+        <UnionType name="HorseOrDog">
+            <types>
+                <Type name="Horse" />
+                <Type name="Dog" />
+            </types>
+        </UnionType>
+
+        <EnumType name="FurColor">
+            <values>
+                <value label="BROWN" value="0" />
+                <value label="BLACK" value="1" />
+                <value label="TAN" value="2" />
+                <value label="SPOTTED" value="3" />
+                <value label="NO_FUR" value="null" />
+                <value label="UNKNOWN" value="undefined" />
+            </values>
+        </EnumType>
+
+        <InputType name="ComplexInput">
+            <fields>
+                <field name="requiredField" nullable="false">
+                    <Type name="Boolean" kind="Scalar" />
+                </field>
+                <field name="nonNullField" nullable="false" default="false">
+                    <Type name="Boolean" kind="Scalar" />
+                </field>
+                <field name="intField">
+                    <Type name="Int" kind="Scalar" />
+                </field>
+                <field name="stringField">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="booleanField">
+                    <Type name="Boolean" kind="Scalar" />
+                </field>
+                <field name="stringListField">
+                    <Type name="String" kind="List" />
+                </field>
+            </fields>
+        </InputType>
+
+    </types>
+
+    <directives>
+        <Directive name="skip">
+            <locations>
+                <location>FIELD</location>
+                <location>FRAGMENT-SPREAD</location>
+                <location>INLINE-FRAGMENT</location>
+            </locations>
+            <args>
+                <Arg name="if" nullable="false">
+                    <Type name="Boolean" kind="Scalar" />
+                </Arg>
+            </args>
+        </Directive>
+        <Directive name="include">
+            <locations>
+                <location>FIELD</location>
+                <location>FRAGMENT-SPREAD</location>
+                <location>INLINE-FRAGMENT</location>
+            </locations>
+            <args>
+                <Arg name="if" nullable="false">
+                    <Type name="Boolean" kind="Scalar" />
+                </Arg>
+            </args>
+        </Directive>
+        <Directive name="onQuery">
+            <locations>
+                <location>QUERY</location>
+            </locations>
+        </Directive>
+        <Directive name="onMutation">
+            <locations>
+                <location>MUTATION</location>
+            </locations>
+        </Directive>
+        <Directive name="onField">
+            <locations>
+                <location>FIELD</location>
+            </locations>
+        </Directive>
+        <Directive name="onVariableDefinition">
+            <locations>
+                <location>VARIABLE-DEFINITION</location>
+            </locations>
+        </Directive>
+    </directives>
+
+    <!-- <subscription xsi:type="gxqls:GraphQLSubscription"></subscription> -->
+
+    <!-- TODO: find better way to expose scalars in use in the schema -->
+    <scalars>
+        <Int />
+        <Float />
+        <String />
+        <Boolean />
+        <ID />
+    </scalars>
+
+</Schema>

@@ -1,0 +1,195 @@
+<Schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://graph.x.qls" xmlns:gxqls="http://graph.x.qls">
+
+    <description>Schema of introspection query</description>
+
+    <Query name="IntrospectionQuery">
+        <fields>
+            <field name="__schema">
+                <Type name="__Schema" />
+            </field>
+        </fields>
+    </Query>
+
+    <types>
+
+        <Type name="__Schema">
+            <fields>
+                <field name="queryType">
+                    <Type name="QueryType" kind="Scalar" />
+                </field>
+                <field name="mutationType">
+                    <Type name="MutationType" kind="Scalar" />
+                </field>
+                <field name="subscriptionType">
+                    <Type name="SubscriptionType" kind="Scalar" />
+                </field>
+                <field name="types">
+                    <Type name="__Type" kind="List" />
+                </field>
+                <field name="directives">
+                    <Type name="__Directive" kind="List" />
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="QueryType">
+            <fields>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="MutationType">
+            <fields>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="SubscriptionType">
+            <fields>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="__Type">
+            <fields>
+                <field name="kind">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="description">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="fields">
+                    <Type name="__Field" kind="List" />
+                    <args>
+                        <Arg name="includeDeprecated" nullable="false">
+                            <Type name="Boolean" kind="Scalar" />
+                        </Arg>
+                    </args>
+                </field>
+                <field name="inputFields">
+                    <Type name="__InputValue" kind="List" />
+                </field>
+                <field name="interfaces">
+                    <Type name="__Type" kind="List" />
+                </field>
+                <field name="enumValues">
+                    <Type name="__EnumValue" kind="List" />
+                    <args>
+                        <Arg name="includeDeprecated" nullable="false">
+                            <Type name="Boolean" kind="Scalar" />
+                        </Arg>
+                    </args>
+                </field>
+                <field name="possibleTypes">
+                    <Type name="__Type" kind="List" />
+                </field>
+                <field name="ofType">
+                    <Type name="OfType" kind="Scalar" />
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="__TypeKind" />
+
+        <Type name="OfType">
+            <fields>
+                <field name="kind">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="ofType">
+                    <Type name="OfType" kind="Scalar" />
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="__EnumValue">
+            <fields>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="description">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="isDeprecated">
+                    <Type name="Boolean" kind="Scalar" />
+                </field>
+                <field name="deprecationReason">
+                    <Type name="String" kind="Scalar" />
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="__Field">
+            <fields>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="description">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="args">
+                    <Type name="__InputValue" kind="List" />
+                </field>
+                <field name="type">
+                    <Type name="__Type" kind="List" />
+                </field>
+                <field name="isDeprecated">
+                    <Type name="Boolean" kind="Scalar" />
+                </field>
+                <field name="deprecationReason">
+                    <Type name="String" kind="Scalar" />
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="__Directive">
+            <fields>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="description">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="locations">
+                    <Type name="String" kind="List" />
+                </field>
+                <field name="args">
+                    <Type name="__InputValue" kind="List" />
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="__DirectiveLocation" />
+
+        <Type name="__InputValue">
+            <fields>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="description">
+                    <Type name="String" kind="Scalar" />
+                </field>
+                <field name="type">
+                    <Type name="__Type" kind="Scalar" />
+                </field>
+                <field name="defaultValue">
+                    <Type name="String" kind="Scalar" />
+                </field>
+            </fields>
+        </Type>
+
+    </types>
+
+</Schema>

@@ -1,0 +1,188 @@
+<Schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://graph.x.qls" xmlns:gxqls="http://graph.x.qls">
+    <!-- TODO: remove one.oecd.org from namespaces -->
+
+    <Query name="Query">
+        <fields>
+
+            <field name="hero">
+                <Type name="Character" />
+                <args>
+                    <Arg name="episode" nullable="true">
+                        <Type name="Episode" kind="Scalar" />
+                        <description>If omitted, returns the hero of the whole saga. If provided, returns the hero of that particular episode.</description>
+                    </Arg>
+                </args>
+            </field>
+
+            <field name="human">
+                <Type name="Human" />
+                <args>
+                    <Arg name="id" nullable="false">
+                        <Type name="ID" kind="Scalar" />
+                        <description>id of the human.</description>
+                    </Arg>
+                </args>
+            </field>
+
+            <field name="droid">
+                <Type name="Droid" />
+                <args>
+                    <Arg name="id" nullable="false">
+                        <Type name="ID" kind="Scalar" />
+                        <description>id of the droid.</description>
+                    </Arg>
+                </args>
+            </field>
+
+        </fields>
+    </Query>
+
+    <types>
+
+        <InterfaceType name="Character">
+            <description>A character in the Star Wars Trilogy.</description>
+            <fields>
+                <field name="id" nullable="false">
+                    <Type name="ID" kind="Scalar" />
+                    <description>The id of the character.</description>
+                </field>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                    <description>The name of the character.</description>
+                </field>
+                <field name="friends">
+                    <Type name="Character" kind="List" />
+                    <description>The friends of the character, or an empty list if they have none.</description>
+                </field>
+                <field name="appearsIn">
+                    <Type name="Episode" kind="List" />
+                    <description>Which movies they appear in.</description>
+                </field>
+                <field name="secretBackstory">
+                    <Type name="String" kind="Scalar" />
+                    <description>All secrets about their past.</description>
+                </field>
+            </fields>
+        </InterfaceType>
+
+        <Type name="Human">
+            <description>A humanoid creature in the Star Wars universe.</description>
+            <interfaces>
+                <Type name="Character" />
+            </interfaces>
+            <fields>
+                <field name="id" nullable="false">
+                    <Type name="ID" kind="Scalar" />
+                    <description>The id of the human.</description>
+                </field>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                    <description>The name of the human.</description>
+                </field>
+                <field name="friends">
+                    <Type name="Character" kind="List" />
+                    <description>The friends of the human, or an empty list if they have none.</description>
+                </field>
+                <field name="appearsIn">
+                    <Type name="Episode" kind="List" />
+                    <description>Which movies they appear in.</description>
+                </field>
+                <field name="homePlanet">
+                    <Type name="String" kind="Scalar" />
+                    <description>The home planet of the human, or null if unknown.</description>
+                </field>
+                <field name="secretBackstory">
+                    <Type name="String" kind="Scalar" />
+                    <description>Where are they from and how they came to be who they are.</description>
+                </field>
+            </fields>
+        </Type>
+
+        <Type name="Droid">
+            <description>A mechanical creature in the Star Wars universe.</description>
+            <interfaces>
+                <Type name="Character" />
+            </interfaces>
+            <fields>
+                <field name="id" nullable="false">
+                    <Type name="ID" kind="Scalar" />
+                    <description>The id of the droid.</description>
+                </field>
+                <field name="name">
+                    <Type name="String" kind="Scalar" />
+                    <description>The name of the droid.</description>
+                </field>
+                <field name="friends">
+                    <Type name="Character" kind="List" />
+                    <description>The friends of the droid, or an empty list if they have none.</description>
+                </field>
+                <field name="appearsIn">
+                    <Type name="Episode" kind="List" />
+                    <description>Which movies they appear in.</description>
+                </field>
+                <field name="secretBackstory">
+                    <Type name="String" kind="Scalar" />
+                    <description>Construction date and the name of the designer.</description>
+                </field>
+                <field name="primaryFunction">
+                    <Type name="String" kind="Scalar" />
+                    <description>The primary function of the droid.</description>
+                </field>
+            </fields>
+        </Type>
+
+        <EnumType name="Episode">
+            <description>One of the films in the Star Wars Trilogy</description>
+            <values>
+                <value label="NEWHOPE" value="4">
+                    <description>Released in 1977.</description>
+                </value>
+                <value label="EMPIRE" value="5">
+                    <description>Released in 1980.</description>
+                </value>
+                <value label="JEDI" value="6">
+                    <description>Released in 1983.</description>
+                </value>
+            </values>
+        </EnumType>
+
+    </types>
+
+    <directives>
+
+        <Directive name="skip">
+            <locations>
+                <location>FIELD</location>
+                <location>FRAGMENT-SPREAD</location>
+                <location>INLINE-FRAGMENT</location>
+            </locations>
+            <args>
+                <Arg name="if" nullable="false">
+                    <Type name="Boolean" kind="Scalar" />
+                </Arg>
+            </args>
+        </Directive>
+
+        <Directive name="include">
+            <locations>
+                <location>FIELD</location>
+                <location>FRAGMENT-SPREAD</location>
+                <location>INLINE-FRAGMENT</location>
+            </locations>
+            <args>
+                <Arg name="if" nullable="false">
+                    <Type name="Boolean" kind="Scalar" />
+                </Arg>
+            </args>
+        </Directive>
+
+    </directives>
+
+    <!-- TODO: find better way to expose scalars in use in the schema -->
+    <scalars>
+        <String />
+        <Boolean />
+        <ID />
+    </scalars>
+
+</Schema>

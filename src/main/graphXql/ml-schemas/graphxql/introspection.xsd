@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://graph.x.qli" xmlns:gxqli="http://graph.x.qli">
+
+  <xs:complexType name="__Schema">
+    <xs:all>
+      <xs:element name="description" type="xs:string" minOccurs="0" />
+      <xs:element name="types" minOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="__Type" type="gxqli:__Type" minOccurs="1" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="queryType" type="gxqli:__Type" minOccurs="1" />
+      <xs:element name="mutationType" type="gxqli:__Type" minOccurs="0" />
+      <xs:element name="subscriptionType" type="gxqli:__Type" minOccurs="0" />
+      <xs:element name="directives" minOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="__Directive" type="gxqli:__Directive" minOccurs="1" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="__Type">
+    <xs:all>
+      <xs:element name="kind" type="gxqli:__TypeKind" minOccurs="1" />
+      <xs:element name="name" type="xs:string" minOccurs="0" />
+      <xs:element name="description" type="xs:string" minOccurs="0" />
+      <xs:element name="fields" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="__Field" type="gxqli:__Field" minOccurs="1" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="interfaces" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="__Type" type="gxqli:__Type" minOccurs="1" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="possibleTypes" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="__Type" type="gxqli:__Type" minOccurs="1" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="enumValues" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="__EnumValue" type="gxqli:__EnumValue" minOccurs="1" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="inputFields" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="__InputValue" type="gxqli:__InputValue" minOccurs="1" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ofType" type="gxqli:__Type" minOccurs="0" />
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="__Field">
+    <xs:all>
+      <xs:element name="name" type="xs:string" minOccurs="1" />
+      <xs:element name="description" type="xs:string" minOccurs="0" />
+      <xs:element name="args" minOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="__InputValue" type="gxqli:__InputValue" minOccurs="1" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="type" type="gxqli:__Type" minOccurs="1" />
+      <xs:element name="isDeprecated" type="xs:boolean" minOccurs="1" />
+      <xs:element name="deprecationReason" type="xs:string" minOccurs="0" />
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="__InputValue">
+    <xs:all>
+      <xs:element name="name" type="xs:string" minOccurs="1" />
+      <xs:element name="description" type="xs:string" minOccurs="0" />
+      <xs:element name="type" type="gxqli:__Type" minOccurs="1" />
+      <xs:element name="defaultValue" type="xs:string" minOccurs="0" />
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="__EnumValue">
+    <xs:all>
+      <xs:element name="name" type="xs:string" minOccurs="1" />
+      <xs:element name="description" type="xs:string" minOccurs="0" />
+      <xs:element name="isDeprecated" type="xs:boolean" minOccurs="1" />
+      <xs:element name="deprecationReason" type="xs:string" minOccurs="0" />
+    </xs:all>
+  </xs:complexType>
+
+  <xs:simpleType name="__TypeKind">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SCALAR" />
+      <xs:enumeration value="OBJECT" />
+      <xs:enumeration value="INTERFACE" />
+      <xs:enumeration value="UNION" />
+      <xs:enumeration value="ENUM" />
+      <xs:enumeration value="INPUT_OBJECT" />
+      <xs:enumeration value="LIST" />
+      <xs:enumeration value="NON_NULL" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="__Directive">
+    <xs:all>
+      <xs:element name="name" type="xs:string" minOccurs="1" />
+      <xs:element name="description" type="xs:string" minOccurs="0" />
+      <xs:element name="locations" minOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="__DirectiveLocation" type="gxqli:__DirectiveLocation" minOccurs="1" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="args" minOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="__InputValue" type="gxqli:__InputValue" minOccurs="1" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:simpleType name="__DirectiveLocation">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="QUERY" />
+      <xs:enumeration value="MUTATION" />
+      <xs:enumeration value="SUBSCRIPTION" />
+      <xs:enumeration value="FIELD" />
+      <xs:enumeration value="FRAGMENT_DEFINITION" />
+      <xs:enumeration value="FRAGMENT_SPREAD" />
+      <xs:enumeration value="INLINE_FRAGMENT" />
+      <xs:enumeration value="SCHEMA" />
+      <xs:enumeration value="SCALAR" />
+      <xs:enumeration value="OBJECT" />
+      <xs:enumeration value="FIELD_DEFINITION" />
+      <xs:enumeration value="ARGUMENT_DEFINITION" />
+      <xs:enumeration value="INTERFACE" />
+      <xs:enumeration value="UNION" />
+      <xs:enumeration value="ENUM" />
+      <xs:enumeration value="ENUM_VALUE" />
+      <xs:enumeration value="INPUT_OBJECT" />
+      <xs:enumeration value="INPUT_FIELD_DEFINITION" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="__Schema" type="gxqli:__Schema" />
+  <xs:element name="__Type" type="gxqli:__Type" />
+  <xs:element name="type" type="gxqli:__Type" />
+  <xs:element name="queryType" type="gxqli:__Type" />
+  <xs:element name="mutationType" type="gxqli:__Type" />
+  <xs:element name="subscriptionType" type="gxqli:__Type" />
+  <xs:element name="__Field" type="gxqli:__Field" />
+  <xs:element name="__InputValue" type="gxqli:__InputValue" />
+  <xs:element name="__EnumValue" type="gxqli:__EnumValue" />
+  <xs:element name="__TypeKind" type="gxqli:__TypeKind" />
+  <xs:element name="__Directive" type="gxqli:__Directive" />
+  <xs:element name="__DirectiveLocation" type="gxqli:__DirectiveLocation" />
+
+</xs:schema>

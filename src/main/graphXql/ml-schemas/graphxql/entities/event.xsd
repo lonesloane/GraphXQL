@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://graph.x.ql" xmlns:gxql="http://graph.x.ql">
+
+    <xs:include schemaLocation="person.xsd" />
+
+    <xs:complexType name="Event">
+        <xs:choice maxOccurs="unbounded">
+            <xs:element name="title" type="xs:string" minOccurs="1" />
+            <xs:element name="location" type="xs:string" minOccurs="1" />
+            <xs:element name="startDate" type="xs:string" minOccurs="1" />
+            <xs:element name="endDate" type="xs:string" minOccurs="1" />
+            <xs:element name="participants">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:int" maxOccurs="unbounded" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:element name="event" type="gxql:Event"></xs:element>
+</xs:schema>

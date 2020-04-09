@@ -1,0 +1,67 @@
+
+buildscript {
+  repositories {
+    maven { 
+      url "https://dev-entrep-1/nexus/content/repositories/Gradle-OECD/" 
+      credentials {
+        username "$mavenUser"
+        password "$mavenPassword"
+      }
+    }
+  }
+  dependencies {
+    classpath "com.marklogic:marklogic-unit-test-client:1.0.beta"
+  }
+}
+
+plugins {
+  id "org.oecd.gradle.oecd-ml-gradle" version "1.0.0"
+	id "maven-publish"
+}
+
+repositories {
+    mavenLocal()
+    maven { 
+      url "https://dev-entrep-1/nexus/content/repositories/Gradle-OECD/" 
+      credentials {
+        username "$mavenUser"
+        password "$mavenPassword"
+      }
+    }
+}
+
+dependencies {
+  mlBundle "com.marklogic:marklogic-unit-test-modules:1.0.beta"
+}
+
+configurations {
+	bundle
+}
+
+task bundleJar(type: Jar) {
+	from(files("./src/main")) 
+	destinationDir file('build/libs/')
+	baseName = "graphXql"
+}
+
+artifacts {
+	bundle bundleJar
+}
+
+publishing {
+    repositories {
+        maven {
+            url = { "https://dev-entrep-1/nexus/content/repositories/$repo/" }
+            credentials {
+                username "$mavenUser"
+                password "$mavenPassword"
+            }
+        }
+    }
+    publications {
+        pluginPublication (MavenPublication) {
+            artifactId "graphXql"
+      			artifact bundleJar
+        }
+    }
+}
