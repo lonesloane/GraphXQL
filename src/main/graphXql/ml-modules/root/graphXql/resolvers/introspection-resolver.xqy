@@ -29,6 +29,7 @@ declare function intro:schema-resolver($var-map as map:map) as element(*, gxqli:
 
 declare function intro:build-schema-types()
 {
+    (: TODO: implement caching mechanism :)
     element gxqli:types 
     {
         intro:build-schema-queryType(),
@@ -538,6 +539,7 @@ declare function intro:type-ofType-resolver($type as element(*, gxqli:__Type), $
 
 declare function intro:type-resolver($var-map as map:map) as element(*, gxqli:__Type)
 {
+    (: TODO: Implement caching mechanism :)
     intro:build-type($intro:SCHEMA/gxqls:types/gxqls:*[@name/string() = map:get($var-map, 'name')])
 };
 

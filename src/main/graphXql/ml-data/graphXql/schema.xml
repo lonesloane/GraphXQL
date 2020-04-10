@@ -1,5 +1,4 @@
 <Schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://graph.x.qls" xmlns:gxqls="http://graph.x.qls">
-    <!-- TODO: remove one.oecd.org from namespaces -->
 
     <description>Schema pretending to cover all possible test scenarios</description>
 
@@ -8,6 +7,15 @@
 
             <field name="person">
                 <Type name="Person" />
+                <args>
+                    <Arg name="id" nullable="false">
+                        <Type name="Int" kind="Scalar" />
+                    </Arg>
+                </args>
+            </field>
+
+            <field name="human">
+                <Type name="Human" />
                 <args>
                     <Arg name="id" nullable="false">
                         <Type name="Int" kind="Scalar" />
@@ -125,9 +133,11 @@
         </InterfaceType>
 
         <InterfaceType name="Human">
+            <description>A human character.</description>
             <fields>
                 <field name="name">
                     <Type name="String" kind="Scalar" />
+                    <description>The name of the human.</description>
                 </field>
             </fields>
         </InterfaceType>
@@ -509,12 +519,12 @@
             </fields>
         </Type>
 
-        <UnionType name="DogOrHuman">
+        <!-- <UnionType name="DogOrHero">
             <types>
                 <Type name="Human" />
                 <Type name="Dog" />
             </types>
-        </UnionType>
+        </UnionType> -->
 
         <UnionType name="HeroOrFoe">
             <types>
