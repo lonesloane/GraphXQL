@@ -47,7 +47,7 @@ declare function disp:get-entity-type($entity as element()) as xs:string
         xdmp:log('[disp:get-entity-type] $entity: '||xdmp:describe($entity, (), ()), 'debug')
     ),
 
-    gxqlr:get-entity-type($entity)
+    gxqlr:typename-resolver($entity)
 };
 
 declare function disp:mutate($node as node(), $variables as map:map)
