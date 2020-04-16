@@ -56,6 +56,8 @@ declare function visit:match($node as node(), $entity) as node()
         else if ($node/@operation/string() eq 'mutation')
         then 
         (
+            (: TODO: Fix bug when mutation values are not global variables :)
+            (: TODO Fix mutation logic, should not require additional "pseudo-query" field to access expected result :)
             disp:mutate($node/selection-set/field, $visit:VARIABLES)
             ,object-node {'data': visit:match($node/selection-set/field/selection-set, ())}
         )
@@ -75,7 +77,7 @@ declare function visit:match($node as node(), $entity) as node()
                     let $field-name := fn:head(($alias, $entity-name))
                     let $entity-resolver := disp:get-entity-resolver($entity-name)
                     let $variables := visit:get-variables($field)
-                    return map:put($json, $field-name, visit:match($field/selection-set, xdmp:apply($entity-resolver, $variables))) 
+                    return map:put($json, $field-name, (xdmp:apply($entity-resolver, $variables)!visit:match($field/selection-set, .))) 
             return xdmp:to-json($json)
         else (: fields :)
             let $json := json:object()
@@ -129,7 +131,7 @@ declare function visit:get-argument-value($argument as node())
     else $argument//@value/string()
 };
 
-declare function visit:include-skip-fields($node as node()) as node()* 
+declare function visit:include-skip-fields($node as node(), $entity) as node()* 
 {
     (
         xdmp:log('[visit:include-skip-fields] $node: '||xdmp:describe($node,(),()), 'debug')
@@ -139,20 +141,30 @@ declare function visit:include-skip-fields($node as node()) as node()*
         TODO: improve support for other directives 
         currently limited to 'include' and 'skip' directives
     :)
-    for $field in $node/field
-    return
-        if ($field/directives) then 
-            if ($field/directives/directive/name/@value/string() eq 'include') then 
-                if (xs:boolean(visit:get-argument-value($field/directives/directive/arguments/argument[./name/@value/string()='if']/value))) 
-                then $field 
-                else ()
-            else if ($field/directives/directive/name/@value/string() eq 'skip') then 
-                if (xs:boolean(visit:get-argument-value($field/directives/directive/arguments/argument[./name/@value/string()='if']/value))) 
-                then () 
-                else $field
-            else fn:error((), 'VISITOR EXCEPTION', ("500", "Internal server error", "unexpected directive: "||$field/directives/directive/name/@value/string()))
-        else 
-            $field
+    (
+        for $field in $node/field
+        return
+            if ($field/directives) then 
+                if ($field/directives/directive/name/@value/string() eq 'include') then 
+                    if (xs:boolean(visit:get-argument-value($field/directives/directive/arguments/argument[./name/@value/string()='if']/value))) 
+                    then $field 
+                    else ()
+                else if ($field/directives/directive/name/@value/string() eq 'skip') then 
+                    if (xs:boolean(visit:get-argument-value($field/directives/directive/arguments/argument[./name/@value/string()='if']/value))) 
+                    then () 
+                    else $field
+                else fn:error((), 'VISITOR EXCEPTION', ("500", "Internal server error", "unsupported directive: "||$field/directives/directive/name/@value/string()))
+            else 
+                $field
+    ),
+    (
+        for $fragment-spread in $node/fragment-spread
+        let $_ := xdmp:log('[visit:list-fields] $fragment-spread: '||xdmp:describe($fragment-spread, (), ()), 'debug')
+        return
+            if (visit:include-fragment($fragment-spread)) 
+            then visit:include-skip-fields(fn:root($node)//fragment-definition[./name/@value=$fragment-spread/name/@value]/selection-set, $entity)
+            else ()
+    )
 };
 
 declare function visit:include-fragment($node as node()) as xs:boolean 
@@ -171,7 +183,6 @@ declare function visit:include-fragment($node as node()) as xs:boolean
         xs:boolean('true')
 };
 
-(: declare function visit:list-fields($node as node(), $entity as element()) as node()* :)
 declare function visit:list-fields($node as node(), $entity) as node()*
 {
     (
@@ -179,17 +190,22 @@ declare function visit:list-fields($node as node(), $entity) as node()*
         ,xdmp:log('[visit:list-fields] $entity: '||xdmp:describe($entity,(),()), 'debug')
     ),
 
-    let $fields := visit:include-skip-fields($node)
+    let $fields := visit:include-skip-fields($node, $entity)
     let $named-fragment-fields := 
-        if ($node/fragment-spread and visit:include-fragment($node/fragment-spread)) 
-        then visit:include-skip-fields(fn:root($node)//fragment-definition[./name/@value=$node/fragment-spread/name/@value]/selection-set)
-        else ()
+        for $fragment-spread in $node/fragment-spread
+        let $_ := xdmp:log('[visit:list-fields] $fragment-spread: '||xdmp:describe($fragment-spread, (), ()), 'debug')
+        return
+            if (visit:include-fragment($fragment-spread)) 
+            then visit:include-skip-fields(fn:root($node)//fragment-definition[./name/@value=$fragment-spread/name/@value]/selection-set, $entity)
+            else ()
     let $inline-fragment-fields :=
-        if ($node/inline-fragment 
-            and (disp:get-entity-type($entity) eq $node/inline-fragment/type-condition/named-type/name/@value/string()) 
-            and visit:include-fragment($node/inline-fragment))
-        then visit:include-skip-fields($node/inline-fragment/selection-set)
-        else ()
+        for $inline-fragment in $node/inline-fragment
+        let $_ := xdmp:log('[visit:list-fields] $inline-fragment: '||xdmp:describe($inline-fragment, (), ()), 'debug')
+        return
+            if ((disp:get-entity-type($entity) eq $inline-fragment/type-condition/named-type/name/@value/string()) 
+                and visit:include-fragment($inline-fragment))
+            then visit:include-skip-fields($inline-fragment/selection-set, $entity)
+            else ()
     return 
         ($fields, $named-fragment-fields, $inline-fragment-fields)
 };

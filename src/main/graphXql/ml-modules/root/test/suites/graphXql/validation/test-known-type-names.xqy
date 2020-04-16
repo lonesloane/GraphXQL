@@ -54,7 +54,7 @@ return
 (: SCALARS MISSING IN THE SCHEMA ARE INVALID :)
 import module namespace test = "http://marklogic.com/test" at "/test/test-helper.xqy";
 (
-    test:load-test-file("schema_lite.xml", xdmp:database(), "http://graph.x.ql/schema"),
+    test:load-test-file("schema_lite.xml", xdmp:database(), "/graphXql/schema.xml"),
     xdmp:document-set-collections('/graphXql/schema.xml', ('/test/data', '/graphXql/schema.xml'))
 )
 ;
@@ -88,7 +88,7 @@ return
 ;
 import module namespace test = "http://marklogic.com/test" at "/test/test-helper.xqy";
 (
-    test:load-test-file("schema.xml", xdmp:database(), "http://graph.x.ql/schema"),
+    test:load-test-file("schema.xml", xdmp:database(), "/graphXql/schema.xml"),
     xdmp:document-set-collections('/graphXql/schema.xml', ('/test/data', '/graphXql/schema.xml'))
 )
 ;

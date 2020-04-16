@@ -454,86 +454,112 @@ declare function intro:type-description-resolver($type as element(*, gxqli:__Typ
 
 declare function intro:type-fields-resolver($type as element(*, gxqli:__Type), $var-map as map:map) (:as element(*, gxqli:__Field)*:)
 {
-    if ($type/gxqli:fields/*)
-    then 
+    if ($type/gxqli:kind/string() = ('OBJECT', 'INTERFACE'))
+    then
     (
-        let $array := json:array()
-        let $_ :=
-            for $value in $type/gxqli:fields/child::*
-                return json:array-push($array, $value)
-        return $array        
+        if ($type/gxqli:fields/*)
+        then 
+        (
+            let $array := json:array()
+            let $_ :=
+                for $value in $type/gxqli:fields/child::*
+                    return json:array-push($array, $value)
+            return $array        
+        )
+        else json:array()
     )
-    else json:array()
+    else ()
 };
 
 declare function intro:type-interfaces-resolver($type as element(*, gxqli:__Type), $var-map as map:map) (:as element(*, gxqli:__Type)*:)
 {
-    if ($type/gxqli:interfaces/*) 
-    then 
+    if ($type/gxqli:kind/string() = ('OBJECT', 'INTERFACE'))
+    then
     (
-        let $array := json:array()
-        let $_ :=
-            for $value in $type/gxqli:interfaces/child::*
-                return json:array-push($array, $value)
-        return $array        
+        if ($type/gxqli:interfaces/*) 
+        then 
+        (
+            let $array := json:array()
+            let $_ :=
+                for $value in $type/gxqli:interfaces/child::*
+                    return json:array-push($array, $value)
+            return $array        
+        )
+        else json:array() 
     )
-    else json:array() 
+    else ()
 };
 
 declare function intro:type-possibleTypes-resolver($type as element(*, gxqli:__Type), $var-map as map:map) (:as element(*, gxqli:__Type)*:)
 {
-    if ($type/gxqli:possibleTypes/*) 
-    then 
+    if ($type/gxqli:kind/string() = ('UNION', 'INTERFACE'))
+    then
     (
-        let $array := json:array()
-        let $_ :=
-            for $value in $type/gxqli:possibleTypes/child::*
-                return json:array-push($array, $value)
-        return $array        
+        if ($type/gxqli:possibleTypes/*) 
+        then 
+        (
+            let $array := json:array()
+            let $_ :=
+                for $value in $type/gxqli:possibleTypes/child::*
+                    return json:array-push($array, $value)
+            return $array        
+        )
+        else json:array() 
     )
-    else json:array() 
+    else ()
 };
 
 declare function intro:type-enumValues-resolver($type as element(*, gxqli:__Type), $var-map as map:map) (:as element(*, gxqli:__EnumValue)*:)
-{
-    if ($type/gxqli:enumValues/*)
-    then 
+{ 
+    if ($type/gxqli:kind/string() = 'ENUM')
+    then
     (
-        let $array := json:array()
-        let $_ :=
-            for $value in $type/gxqli:enumValues/child::*
-                return json:array-push($array, $value)
-        return $array        
+        if ($type/gxqli:enumValues/*)
+        then 
+        (
+            let $array := json:array()
+            let $_ :=
+                for $value in $type/gxqli:enumValues/child::*
+                    return json:array-push($array, $value)
+            return $array        
+        )
+        else json:array()
     )
-    else if ($type/gxqli:type/string() = 'ENUM') 
-    then json:array()
     else ()
 };
 
 declare function intro:type-inputFields-resolver($type as element(*, gxqli:__Type), $var-map as map:map) (:as element(*, gxqli:__InputValue)*:)
 {
-    if ($type/gxqli:inputFields/*)
-    then 
+    if ($type/gxqli:kind/string() = 'INPUT_OBJECT')
+    then
     (
-        let $array := json:array()
-        let $_ :=
-            for $value in $type/gxqli:inputFields/child::*
-                return json:array-push($array, $value)
-        return $array        
+        if ($type/gxqli:inputFields/*)
+        then 
+        (
+            let $array := json:array()
+            let $_ :=
+                for $value in $type/gxqli:inputFields/child::*
+                    return json:array-push($array, $value)
+            return $array        
+        )
+        else json:array()
     )
-    else if ($type/gxqli:kind/string() = 'INPUT_OBJECT') 
-    then json:array()
     else ()
 };
 
 declare function intro:type-ofType-resolver($type as element(*, gxqli:__Type), $var-map as map:map) as element(*, gxqli:__Type)?
 {
-    if ($type/gxqli:ofType) then 
-    element gxqli:__Type 
-    {
-        element gxqli:kind { $type/gxqli:ofType/gxqli:kind/string() },
-        element gxqli:name { $type/gxqli:ofType/gxqli:name/string() }
-    }
+    if ($type/gxqli:kind/string() = ('NON_NULL', 'LIST'))
+    then
+    (
+        if ($type/gxqli:ofType) then 
+        element gxqli:__Type 
+        {
+            element gxqli:kind { $type/gxqli:ofType/gxqli:kind/string() },
+            element gxqli:name { $type/gxqli:ofType/gxqli:name/string() }
+        }
+        else ()
+    )
     else ()
 };
 

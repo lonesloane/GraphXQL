@@ -73,9 +73,6 @@ let $expected := xdmp:to-json(xdmp:from-json-string('
           "name": "Hero"
         },
         {
-          "name": "DogOrHuman"
-        },
-        {
           "name": "Boolean"
         },
         {

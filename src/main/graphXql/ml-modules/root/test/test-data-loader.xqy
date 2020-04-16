@@ -1,13 +1,13 @@
 xquery version "1.0-ml";
 
-(:declare namespace tdl = "http://one.oecd.org/one/test-data-loader";:)
-module namespace tdl = "http://one.oecd.org/one/test-data-loader";
+(:declare namespace tdl = "/graphXql/one/test-data-loader";:)
+module namespace tdl = "/graphXql/one/test-data-loader";
 import module namespace cvt = "http://marklogic.com/cpf/convert" at "/MarkLogic/conversion/convert.xqy";
 
 declare namespace s="http://www.w3.org/2005/xpath-functions";
 
 declare variable $tdl:UNSUPPORTED_FILE_NAME_TEMPLATE as xs:string := 'unsupported file name template';
-declare variable $tdl:URI-ROOT as xs:string := 'http://one.oecd.org/';
+declare variable $tdl:URI-ROOT as xs:string := '/graphXql/';
 declare variable $tdl:__CALLER_FILE__ := tdl:get-caller();
 
 (:-----------------------------------
@@ -92,40 +92,40 @@ declare variable $tdl:FILENAME_TEMPLATES as map:map := map:map()
     COLLECTIONS PER FILE TYPES
 --------------------------------:)
 declare variable $tdl:COLLECTIONS as map:map :=map:map()
-    => map:with($tdl:TYPE_EVENT, ('http://one.oecd.org/one-content', 'http://one.oecd.org/events'))
-    => map:with($tdl:TYPE_EVENT-PARTICIPATION, ('http://one.oecd.org/event-participations'))
-    => map:with($tdl:TYPE_SESSION-PARTICIPATION, ('http://one.oecd.org/session-participations'))
-    => map:with($tdl:TYPE_SESSION, ('http://one.oecd.org/events/sessions'))
-    => map:with($tdl:TYPE_PERSON, ('http://one.oecd.org/one-content', 'http://one.oecd.org/persons'))
-    => map:with($tdl:TYPE_PERSON-VERSION, ('http://one.oecd.org/persons/versions'))
-    => map:with($tdl:TYPE_OFFDOC, ('http://one.oecd.org/official-documents'))
-    => map:with($tdl:TYPE_LV, ('http://one.oecd.org/one-content', 'http://one.oecd.org/language-version'))
-    => map:with($tdl:TYPE_REP, ('http://one.oecd.org/representation'))
-    => map:with($tdl:TYPE_ROOM-DOC, ('http://one.oecd.org/room-documents'))
-    => map:with($tdl:TYPE_PUB-LV, ('http://one.oecd.org/pub-language-version', 'http://one.oecd.org/one-content'))
-    => map:with($tdl:TYPE_PUB-REP, ('http://one.oecd.org/pub-representation'))
-    => map:with($tdl:TYPE_DELEGATION-MEMBERSHIP, ('http://one.oecd.org/delegation-memberships'))
-    => map:with($tdl:TYPE_DELEGATION, ('http://one.oecd.org/delegations'))
+    => map:with($tdl:TYPE_EVENT, ('/graphXql/one-content', '/graphXql/events'))
+    => map:with($tdl:TYPE_EVENT-PARTICIPATION, ('/graphXql/event-participations'))
+    => map:with($tdl:TYPE_SESSION-PARTICIPATION, ('/graphXql/session-participations'))
+    => map:with($tdl:TYPE_SESSION, ('/graphXql/events/sessions'))
+    => map:with($tdl:TYPE_PERSON, ('/graphXql/one-content', '/graphXql/persons'))
+    => map:with($tdl:TYPE_PERSON-VERSION, ('/graphXql/persons/versions'))
+    => map:with($tdl:TYPE_OFFDOC, ('/graphXql/official-documents'))
+    => map:with($tdl:TYPE_LV, ('/graphXql/one-content', '/graphXql/language-version'))
+    => map:with($tdl:TYPE_REP, ('/graphXql/representation'))
+    => map:with($tdl:TYPE_ROOM-DOC, ('/graphXql/room-documents'))
+    => map:with($tdl:TYPE_PUB-LV, ('/graphXql/pub-language-version', '/graphXql/one-content'))
+    => map:with($tdl:TYPE_PUB-REP, ('/graphXql/pub-representation'))
+    => map:with($tdl:TYPE_DELEGATION-MEMBERSHIP, ('/graphXql/delegation-memberships'))
+    => map:with($tdl:TYPE_DELEGATION, ('/graphXql/delegations'))
     => map:with($tdl:TYPE_FUNCTIONAL-ROLE, ('http://ems.oecd.org/delegation-functionnal-roles'))
-    => map:with($tdl:TYPE_ALERT, ('http://one.oecd.org/alerts'))
-    => map:with($tdl:TYPE_DOWNLOAD, ('http://one.oecd.org/downloads'))
-    => map:with($tdl:TYPE_COUNTRY, ('http://one.oecd.org/Taxonomy/Countries#Countries','http://one.oecd.org/reference-data'))
-    => map:with($tdl:TYPE_CITY, ('http://one.oecd.org/Taxonomy/Cities#Cities'))
-    => map:with($tdl:TYPE_ROLES, ('http://one.oecd.org/Taxonomy/Roles#Roles'))
+    => map:with($tdl:TYPE_ALERT, ('/graphXql/alerts'))
+    => map:with($tdl:TYPE_DOWNLOAD, ('/graphXql/downloads'))
+    => map:with($tdl:TYPE_COUNTRY, ('/graphXql/Taxonomy/Countries#Countries','/graphXql/reference-data'))
+    => map:with($tdl:TYPE_CITY, ('/graphXql/Taxonomy/Cities#Cities'))
+    => map:with($tdl:TYPE_ROLES, ('/graphXql/Taxonomy/Roles#Roles'))
     => map:with($tdl:TYPE_LANGUAGE, ('http://kim.oecd.org/Taxonomy/Languages#Languages'))
-    => map:with($tdl:TYPE_REGISTRATION-STATUS, ('http://one.oecd.org/RegistrationStatus#Participants'))
-    => map:with($tdl:TYPE_COMPANY, ('http://one.oecd.org/company'))
-    => map:with($tdl:TYPE_TYPES, ('http://one.oecd.org/reference-data', 'http://one.oecd.org/Taxonomy/Types#Types'))
-    => map:with($tdl:TYPE_CHANGE_LOG, ('http://one.oecd.org/change-logs'))
-    => map:with($tdl:TYPE_PROFILE, ('http://one.oecd.org/document-access/profiles'))
-    => map:with($tdl:TYPE_TILE, ('http://one.oecd.org/tiles'))
-    => map:with($tdl:TYPE_ROOT_COTE, ('http://one.oecd.org/root-cotes'))
-    => map:with($tdl:TYPE_COUNTRY_RESTRICTION, ('http://one.oecd.org/document-access/country-restrictions'))
-    => map:with($tdl:TYPE_ACCESS_REQUEST, ('http://one.oecd.org/document-access/access-requests', 'http://one.oecd.org/top-level-cotes-access-requests'))
-    => map:with($tdl:TYPE_DOC_ACCESS_RULE, ('http://one.oecd.org/doc-access-rules'))
-    => map:with($tdl:TYPE_MEDIA_FILE, ('http://one.oecd.org/media-files'))
-    => map:with($tdl:TYPE_BO_ACCESS_RIGHTS, ('http://one.oecd.org/back-office/access-rights'))
-    => map:with($tdl:TYPE_BO_FUNCTIONALITY, ('http://one.oecd.org/back-office/functionalities'));
+    => map:with($tdl:TYPE_REGISTRATION-STATUS, ('/graphXql/RegistrationStatus#Participants'))
+    => map:with($tdl:TYPE_COMPANY, ('/graphXql/company'))
+    => map:with($tdl:TYPE_TYPES, ('/graphXql/reference-data', '/graphXql/Taxonomy/Types#Types'))
+    => map:with($tdl:TYPE_CHANGE_LOG, ('/graphXql/change-logs'))
+    => map:with($tdl:TYPE_PROFILE, ('/graphXql/document-access/profiles'))
+    => map:with($tdl:TYPE_TILE, ('/graphXql/tiles'))
+    => map:with($tdl:TYPE_ROOT_COTE, ('/graphXql/root-cotes'))
+    => map:with($tdl:TYPE_COUNTRY_RESTRICTION, ('/graphXql/document-access/country-restrictions'))
+    => map:with($tdl:TYPE_ACCESS_REQUEST, ('/graphXql/document-access/access-requests', '/graphXql/top-level-cotes-access-requests'))
+    => map:with($tdl:TYPE_DOC_ACCESS_RULE, ('/graphXql/doc-access-rules'))
+    => map:with($tdl:TYPE_MEDIA_FILE, ('/graphXql/media-files'))
+    => map:with($tdl:TYPE_BO_ACCESS_RIGHTS, ('/graphXql/back-office/access-rights'))
+    => map:with($tdl:TYPE_BO_FUNCTIONALITY, ('/graphXql/back-office/functionalities'));
 
 declare function tdl:apply-template-matcher($filename as xs:string, $file_type as xs:string) {
     let $regex := map:get($tdl:FILENAME_TEMPLATES, $file_type)
@@ -286,46 +286,46 @@ declare function tdl:compute-language-uri($matches as node()*) as xs:string{
 
 declare function tdl:compute-change-log-uri($matches as node()*) as xs:string{
     let $uri := $matches//s:match/s:group[@nr eq 1]/string()
-    let $uri := fn:concat('http://one.oecd.org/change-log/', $uri)
+    let $uri := fn:concat('/graphXql/change-log/', $uri)
     let $_ := xdmp:log(fn:concat('tdl:compute-change-log-uri: ', $uri), 'debug')
     return $uri
 };
 
 declare function tdl:compute-access-request-uri($matches as node()*) as xs:string {
     let $uri := $matches//s:match/s:group[@nr eq 1]/string()
-    let $uri := fn:concat('http://one.oecd.org/document-access/access-request/', $uri)
+    let $uri := fn:concat('/graphXql/document-access/access-request/', $uri)
     let $_ := xdmp:log(fn:concat('tdl:compute-access-request-uri: ', $uri), 'debug')
     return $uri
 };
 
 declare function tdl:compute-profile-uri($matches as node()*) as xs:string{
     let $key := $matches//s:match/s:group[@nr eq 1]/string()
-    let $uri := fn:concat('http://one.oecd.org/document-access/profile/', $key)
+    let $uri := fn:concat('/graphXql/document-access/profile/', $key)
     return $uri
 };
 
 declare function tdl:compute-root-cote-uri($matches as node()*) as xs:string{
     let $key := $matches//s:match/s:group[@nr eq 1]/string()
     let $key := fn:replace($key, "-", "/")
-    let $uri := fn:concat('http://one.oecd.org/root-cote/', $key)
+    let $uri := fn:concat('/graphXql/root-cote/', $key)
     return $uri
 };
 
 declare function tdl:compute-country-restriction-uri($matches as node()*) as xs:string{
     let $key := $matches//s:match/s:group[@nr eq 1]/string()
-    let $uri := fn:concat('http://one.oecd.org/document-access/country-restriction/', $key)
+    let $uri := fn:concat('/graphXql/document-access/country-restriction/', $key)
     return $uri
 };
 
 declare function tdl:compute-tile-uri($matches as node()*) as xs:string{
     let $key := $matches//s:match/s:group[@nr eq 1]/string()
-    let $uri := fn:concat('http://one.oecd.org/tile/', $key)
+    let $uri := fn:concat('/graphXql/tile/', $key)
     return $uri
 };
 
 declare function tdl:compute-doc-access-rule-uri($matches as node()*) as xs:string{
     let $key := $matches//s:match/s:group[@nr eq 1]/string()
-    let $uri := fn:concat('http://one.oecd.org/doc-access-rule/', $key)
+    let $uri := fn:concat('/graphXql/doc-access-rule/', $key)
     return $uri
 };
 
@@ -352,11 +352,11 @@ declare function tdl:compute-entity-uri($file_type as xs:string, $filename as xs
     else if ($file_type eq $tdl:TYPE_COUNTRY) then tdl:compute-country-uri($matches)
     else if ($file_type eq $tdl:TYPE_CITY) then tdl:compute-city-uri($matches)
     else if ($file_type eq $tdl:TYPE_LANGUAGE) then tdl:compute-language-uri($matches)
-    else if ($file_type eq $tdl:TYPE_ROLES) then 'http://one.oecd.org/Taxonomy/Roles'
+    else if ($file_type eq $tdl:TYPE_ROLES) then '/graphXql/Taxonomy/Roles'
     else if ($file_type eq $tdl:TYPE_SEARCH-RESPONSE) then tdl:compute-search-response-uri($matches) (: '/search-response.xml' :)
-    else if ($file_type eq $tdl:TYPE_REGISTRATION-STATUS) then 'http://one.oecd.org/RegistrationStatus'
+    else if ($file_type eq $tdl:TYPE_REGISTRATION-STATUS) then '/graphXql/RegistrationStatus'
     else if ($file_type eq $tdl:TYPE_COMPANY) then tdl:compute-company-uri($matches)
-    else if ($file_type eq $tdl:TYPE_TYPES) then 'http://one.oecd.org/Taxonomy/Types'
+    else if ($file_type eq $tdl:TYPE_TYPES) then '/graphXql/Taxonomy/Types'
     else if ($file_type eq $tdl:TYPE_CHANGE_LOG) then tdl:compute-change-log-uri($matches)
     else if ($file_type eq $tdl:TYPE_ACCESS_REQUEST) then tdl:compute-access-request-uri($matches)
     else if ($file_type eq $tdl:TYPE_PROFILE) then tdl:compute-profile-uri($matches)

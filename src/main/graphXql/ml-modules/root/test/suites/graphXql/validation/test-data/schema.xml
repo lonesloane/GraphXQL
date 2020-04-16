@@ -519,12 +519,12 @@
             </fields>
         </Type>
 
-        <!-- <UnionType name="DogOrHero">
+        <UnionType name="DogOrHuman">
             <types>
                 <Type name="Human" />
                 <Type name="Dog" />
             </types>
-        </UnionType> -->
+        </UnionType>
 
         <UnionType name="HeroOrFoe">
             <types>

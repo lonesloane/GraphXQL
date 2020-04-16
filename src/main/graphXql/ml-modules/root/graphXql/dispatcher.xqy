@@ -53,7 +53,8 @@ declare function disp:get-entity-type($entity as element()) as xs:string
 declare function disp:mutate($node as node(), $variables as map:map)
 {
     (
-        xdmp:log('[disp:mutate] $node: '||xdmp:describe($node,(),()), 'debug')
+        xdmp:log('[disp:mutate] $node: '||xdmp:describe($node,(),()), 'debug'),
+        xdmp:log('[disp:mutate] $variables: '||xdmp:describe($variables,(),()), 'debug')
     ),
 
     let $mutation := gxqlr:mutation-resolver($node/name/@value/string())

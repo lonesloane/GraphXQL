@@ -8,8 +8,10 @@ import module namespace validator = "http://graph.x.ql/validator"
   at "/graphXql/validator.xqy";
 import module namespace visitor = "http://graph.x.ql/visitor" 
   at "/graphXql/visitor.xqy";
-import module namespace errh = "http://one.oecd.org/one/lib/errors.xqy" 
+import module namespace errh = "/graphXql/errors" 
   at "/graphXql/errors.xqy"; 
+import module namespace config = "http://graph.x.ql/config"
+    at "/graphXql/config/config.xqy";
 
 declare namespace rapi = "http://marklogic.com/rest-api";
 
@@ -18,16 +20,25 @@ declare variable $graphxql:MODULE-NAME as xs:string := "graphxql-api";
 declare function graphxql:execute($input as document-node()*, $params as map:map, $context as map:map){
     let $query := $input/query
     let $variables := fn:head(($input/variables, map:map()))
-    (: TODO: implement validation caching strategy for (query/variables) set :)
-    let $report := validator:validate(parser:parse($query, xs:boolean('true')))
-    return 
-      if (fn:count($report/errors) gt 0) 
-      then 
+    return
+    (
+      if ($config:DO_VALIDATION)
+      then
       (
-        map:put($context, "output-status", (400, "VALIDATION-ERROR")),
-        $report
+        (: TODO: implement validation caching strategy for (query/variables) set :)
+        let $report := validator:validate(parser:parse($query, xs:boolean('true')))
+        return 
+          if (fn:count($report/errors) gt 0) 
+          then 
+          (
+            map:put($context, "output-status", (400, "VALIDATION-ERROR")),
+            $report
+          )
+          else visitor:visit(parser:parse($query), $variables)
       )
-      else visitor:visit(parser:parse($query), $variables)
+      else
+        visitor:visit(parser:parse($query), $variables)
+    )
 };
 
 declare %rapi:transaction-mode("update") function graphxql:post(

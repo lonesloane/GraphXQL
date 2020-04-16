@@ -1,5 +1,5 @@
 xquery version "1.0-ml";
-module namespace errh = "http://one.oecd.org/one/lib/errors.xqy";
+module namespace errh = "/graphXql/errors";
 
 declare function errh:forbidden() {
   fn:error((), "RESTAPI-SRVEXERR", ("403", "Forbidden", "Access denied"))

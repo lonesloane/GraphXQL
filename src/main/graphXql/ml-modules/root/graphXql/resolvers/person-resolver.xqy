@@ -3,7 +3,7 @@ xquery version "1.0-ml";
 module namespace gxqlr = "http://graph.x.ql/resolvers";
 
 import schema namespace gxql ="http://graph.x.ql" 
-    at "/graphxql/entity-types.xsd";
+    at "/graphxql/entities/graphXql-types.xsd";
 
 declare default element namespace "http://graph.x.ql";
 
@@ -12,7 +12,7 @@ declare function gxqlr:person-entity-resolver($var-map as map:map) as element(*,
     if (map:contains($var-map, 'id'))
     then 
     (
-        let $person-uri := fn:concat('http://one.oecd.org/person/', map:get($var-map, 'id'))
+        let $person-uri := fn:concat('/graphXql/person/', map:get($var-map, 'id'))
         return fn:doc($person-uri)/node()
     )
     else fn:error((), 'ENTITY RESOLVER EXCEPTION', ("500", "Internal server error", "No identifier received in variables: ", $var-map))
@@ -49,21 +49,21 @@ declare function gxqlr:person-appearsIn-resolver($person as element(*, gxql:Pers
 declare function gxqlr:person-friends-resolver($person as element(*, gxql:Person), $var-map as map:map) as element(*, gxql:Person)*
 {
     let $friend-ids := $person/friends/person/id/string()
-    let $person-uris := $friend-ids!fn:concat('http://one.oecd.org/person/', .)
+    let $person-uris := $friend-ids!fn:concat('/graphXql/person/', .)
     return $person-uris!fn:doc(.)/node()
 };
 
 declare function gxqlr:person-foes-resolver($person as element(*, gxql:Hero), $var-map as map:map) as element(*, gxql:Person)*
 {
     let $foe-ids := $person/foes/person/id/string()
-    let $person-uris := $foe-ids!fn:concat('http://one.oecd.org/person/', .)
+    let $person-uris := $foe-ids!fn:concat('/graphXql/person/', .)
     return $person-uris!fn:doc(.)/node()
 };
 
 declare function gxqlr:person-accomplices-resolver($person as element(*, gxql:Foe), $var-map as map:map) as element(*, gxql:Person)*
 {
     let $accomplice-ids := $person/accomplices/person/id/string()
-    let $person-uris := $accomplice-ids!fn:concat('http://one.oecd.org/person/', .)
+    let $person-uris := $accomplice-ids!fn:concat('/graphXql/person/', .)
     return $person-uris!fn:doc(.)/node()
 };
 

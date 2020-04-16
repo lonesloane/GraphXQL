@@ -265,7 +265,7 @@ let $query :=
     dog @include(if: true) {
         name
     }
-    human @skip(if: false) {
+    human(id:1) @skip(if: false) {
         name
     }
 }

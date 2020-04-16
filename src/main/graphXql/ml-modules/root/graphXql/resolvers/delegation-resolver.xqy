@@ -3,7 +3,7 @@ xquery version "1.0-ml";
 module namespace gxqlr = "http://graph.x.ql/resolvers";
 
 import schema namespace gxql ="http://graph.x.ql" 
-    at "/graphxql/entity-types.xsd";
+    at "/graphxql/entities/graphXql-types.xsd";
 
 declare default element namespace "http://graph.x.ql";
 
@@ -21,7 +21,7 @@ declare function gxqlr:delegation-entity-resolver($var-map as map:map) as elemen
     if (map:contains($var-map, 'id'))
     then 
     (
-        let $delegation-uri := fn:concat('http://one.oecd.org/delegation/', map:get($var-map, 'id'))
+        let $delegation-uri := fn:concat('/graphXql/delegation/', map:get($var-map, 'id'))
         return fn:doc($delegation-uri)/node()
     )
     else fn:error((), 'entity-resolver EXCEPTION', ("500", "Internal server error", "No identifier received in variables: ", $var-map))
@@ -45,6 +45,6 @@ declare function gxqlr:delegation-membership-date-resolver($delegation as elemen
 declare function gxqlr:delegation-members-resolver($delegation as element(), $var-map as map:map) as element(*, gxql:Person)*
 {
     let $member-ids := $delegation/members/person/id/string()
-    let $person-uris := $member-ids!fn:concat('http://one.oecd.org/person/', .)
+    let $person-uris := $member-ids!fn:concat('/graphXql/person/', .)
     return $person-uris!fn:doc(.)/node()
 };

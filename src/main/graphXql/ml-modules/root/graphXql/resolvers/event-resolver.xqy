@@ -3,7 +3,7 @@ xquery version "1.0-ml";
 module namespace gxqlr = "http://graph.x.ql/resolvers";
 
 import schema namespace gxql ="http://graph.x.ql" 
-    at "/graphxql/entity-types.xsd";
+    at "/graphxql/entities/graphXql-types.xsd";
 
 declare default element namespace "http://graph.x.ql";
 
@@ -22,7 +22,7 @@ declare function gxqlr:event-entity-resolver($var-map as map:map) as element(*, 
     if (map:contains($var-map, 'id'))
     then 
     (
-        let $event-uri := fn:concat('http://one.oecd.org/event/', map:get($var-map, 'id'))
+        let $event-uri := fn:concat('/graphXql/event/', map:get($var-map, 'id'))
         return fn:doc($event-uri)/node()
     )
     else fn:error((), 'entity-resolver EXCEPTION', ("500", "Internal server error", "No identifier received in variables: ", $var-map))
@@ -51,6 +51,6 @@ declare function gxqlr:event-end-date-resolver($event as element(), $var-map as 
 declare function gxqlr:event-participants-resolver($event as element(), $var-map as map:map) as element(*, gxql:Person)*
 {
     let $participant-ids := $event/participants/person/id/string()
-    let $person-uris := $participant-ids!fn:concat('http://one.oecd.org/person/', .)
+    let $person-uris := $participant-ids!fn:concat('/graphXql/person/', .)
     return $person-uris!fn:doc(.)/node()
 };

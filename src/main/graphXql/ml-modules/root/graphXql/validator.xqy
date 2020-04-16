@@ -8,7 +8,6 @@ import module namespace builder = "http://graph.x.ql/schema-builder"
 declare namespace gxqls = "http://graph.x.qls";
 
 declare variable $validator:SCHEMA as element(*, gxqls:Schema) := builder:build-graphXql-schema();
-(: declare variable $validator:SCHEMA as element(*, gxqls:Schema) := fn:doc('/graphXql/schema.xml')/gxqls:Schema; :)
 declare variable $validator:GRAPHQL-ERRORS := ();
 declare variable $validator:KNOWN-OPERATION-NAMES as map:map := map:map();
 declare variable $validator:KNOWN-VARIABLE-NAMES as map:map := map:map();
@@ -1206,8 +1205,9 @@ declare function validator:scalar-leaf($field as node(), $context as map:map)
         xdmp:set($validator:GRAPHQL-ERRORS, ($validator:GRAPHQL-ERRORS, validator:error('SCALAR-LEAF', $error-message, $error-location)))
     )
     else if ($field-type 
+        and $field/selection-set
         and not($validator:SCHEMA/gxqls:types/child::*[@name/string() = $field-type]/gxqls:fields)
-        and $field/selection-set)
+        and not($SCHEMA/gxqls:types/child::*[@name/string() = $SCHEMA/gxqls:types/child::*[@name/string() = 'SearchResult']/gxqls:types/gxqls:Type/@name/string()]/gxqls:fields))
     then
     (
         let $error-message := "Field ["||$field-name||"] must not have a selection since type ["||$field-type||"] has no subfields."
@@ -1346,15 +1346,15 @@ declare function validator:values-of-correct-type($arg as node(), $context as ma
         then $field-name
         else ()
     let $type-name := 
-        if ($validator:SCHEMA/gxqls:Query/gxqls:fields/gxqls:field[@name/string() = $parent-type-name]) 
-        then $validator:SCHEMA/gxqls:Query/gxqls:fields/gxqls:field[@name/string() = $parent-type-name]/gxqls:Type/@name/string()
+        if ($validator:SCHEMA/child::*[local-name()=('Query', 'Mutation')]/gxqls:fields/gxqls:field[@name/string() = $parent-type-name]) 
+        then $validator:SCHEMA/child::*[local-name()=('Query', 'Mutation')]/gxqls:fields/gxqls:field[@name/string() = $parent-type-name]/gxqls:Type/@name/string()
         else if ($validator:SCHEMA/gxqls:types/child::*[fn:upper-case(@name/string()) = fn:upper-case($parent-type-name)])
         then $validator:SCHEMA/gxqls:types/child::*[fn:upper-case(@name/string()) = fn:upper-case($parent-type-name)]/@name/string()
         else ()
     let $schema-type := 
         (
             $validator:SCHEMA/gxqls:types/child::*[@name/string() = $type-name]/gxqls:fields/gxqls:field[@name/string()=$field-name],
-            $validator:SCHEMA/gxqls:Query/gxqls:fields/gxqls:field[@name/string()=$field-name and ./gxqls:Type/@name/string() = $type-name]
+            $validator:SCHEMA/child::*[local-name()=('Query', 'Mutation')]/gxqls:fields/gxqls:field[@name/string()=$field-name and ./gxqls:Type/@name/string() = $type-name]
         )
     let $schema-arg := $schema-type/gxqls:args/gxqls:Arg[@name/string()=$arg-name]
     let $schema-arg-type := $schema-arg/gxqls:Type/@name/string()
@@ -1784,7 +1784,6 @@ declare function validator:error($validation-rule as xs:string?, $error-message 
     {
         "rule": $validation-rule,
         "message": $error-message,
-
         "locations": $error-location
     }
 };

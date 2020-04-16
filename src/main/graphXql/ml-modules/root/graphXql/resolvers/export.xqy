@@ -10,7 +10,7 @@ import module namespace gxqlr = "http://graph.x.ql/resolvers"
     "/graphXql/resolvers/delegation-resolver.xqy",
     "/graphXql/resolvers/mutation-resolver.xqy";
 
-import schema namespace gxql = "http://graph.x.ql" at "/graphxql/entity-types.xsd";
+import schema namespace gxql = "http://graph.x.ql" at "/graphxql/entities/graphXql-types.xsd";
 
 declare function gxqlr:get-entity-resolver($entity-name as xs:string) as xdmp:function
 {
