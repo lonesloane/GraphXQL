@@ -32,7 +32,6 @@ declare function visit:visit($node as node(), $variables as map:map)
     return visit:match($node, ())
 };
 
-(: declare function visit:match($node as node(), $entity as element()?) as node() :)
 declare function visit:match($node as node(), $entity) as node()
 {
     xdmp:log('[visit:match]: '||$node/name(), 'debug'),
@@ -56,12 +55,12 @@ declare function visit:match($node as node(), $entity) as node()
         else if ($node/@operation/string() eq 'mutation')
         then 
         (
-            (: TODO: Fix bug when mutation values are not global variables :)
-            (: TODO Fix mutation logic, should not require additional "pseudo-query" field to access expected result :)
-            disp:mutate($node/selection-set/field, $visit:VARIABLES)
-            ,object-node {'data': visit:match($node/selection-set/field/selection-set, ())}
+            let $entity := disp:mutate($node/selection-set/field, visit:get-variables($node/selection-set/field))
+            return 
+                if ($node/selection-set/field/selection-set)
+                then object-node {'data': visit:match($node/selection-set/field/selection-set, $entity)}
+                else ()
         )
-        
         else 
             fn:error((), 'VISITOR EXCEPTION', ("500", "Internal server error", "unsupported operation: "||$node/@operation/string()))
     

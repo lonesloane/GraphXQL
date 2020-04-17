@@ -59,17 +59,6 @@ declare function disp:mutate($node as node(), $variables as map:map)
 
     let $mutation := gxqlr:mutation-resolver($node/name/@value/string())
     return
-    xdmp:invoke-function
-    (
-        function() {
-            $mutation($variables)
-        },
-        <options xmlns="xdmp:eval">
-            <update>true</update>
-            <commit>auto</commit>
-            <isolation>different-transaction</isolation>
-            <prevent-deadlocks>false</prevent-deadlocks>
-        </options>
-    )
+        xdmp:apply($mutation, $variables)
 };
 
