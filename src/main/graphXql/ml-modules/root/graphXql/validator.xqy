@@ -50,7 +50,7 @@ declare function validator:match($node as node(), $context as map:map?)
     (: TODO: single-field-subscription :)
     (: TODO: unique-directive-names :)
     (: TODO: unique-enum-value-names :)
-    (: TODO: unique-field-definition-names :)
+    (: TODO: unique-field_definition-names :)
     case 'document'
     return
         (
@@ -95,18 +95,18 @@ declare function validator:match($node as node(), $context as map:map?)
             ,map:put($context, 'location', map:get($context, 'location')[position() lt last()])
         )
 
-    case 'fragment-definition'
-    case 'fragment-spread'
-    case 'inline-fragment'
+    case 'fragment_definition'
+    case 'fragment_spread'
+    case 'inline_fragment'
     return 
         (
             map:put($context, 'location', (map:get($context, 'location'),fn:upper-case($node/name())))
             ,map:put($context, 'fragment', $node/name/@value/string())
 
             ,validator:fragment-on-composite-type($node, $context)
-            ,(if ($node/name() = ('fragment-spread', 'inline-fragment')) then validator:possible-fragment-spread($node, $context) else ())
-            ,(if ($node/name()='fragment-spread') then validator:known-fragment-names($node, $context) else ())
-            ,(if ($node/name()='fragment-definition') 
+            ,(if ($node/name() = ('fragment_spread', 'inline_fragment')) then validator:possible-fragment_spread($node, $context) else ())
+            ,(if ($node/name()='fragment_spread') then validator:known-fragment-names($node, $context) else ())
+            ,(if ($node/name()='fragment_definition') 
                 then 
                 (
                     validator:no-fragment-cycles($node, $context) 
@@ -253,7 +253,7 @@ declare function validator:fragment-on-composite-type($field as node(), $context
             then ()
             else 
             (
-                if ($field/name() = 'fragment-definition') 
+                if ($field/name() = 'fragment_definition') 
                 then
                     let $error-message := 'Fragment '||$field/name/@value/string()||' cannot condition on non composite type '||$type-name||'.'
                     let $line := ($field/name/location/token)[1]/@line/string()
@@ -261,7 +261,7 @@ declare function validator:fragment-on-composite-type($field as node(), $context
                     let $error-location := array-node { object-node {"line": xs:int($line), "column": xs:int($column)} }
                     return
                         xdmp:set($validator:GRAPHQL-ERRORS, ($validator:GRAPHQL-ERRORS, validator:error('FRAGMENT-ON-COMPOSITE-TYPE',$error-message, $error-location)))
-                else if ($field/name() = 'inline-fragment') 
+                else if ($field/name() = 'inline_fragment') 
                 then 
                     let $error-message := 'Fragment cannot condition on non composite type '||$type-name||'.'
                     let $line := ($field/type-condition/named-type/name/location/token)[1]/@line/string()
@@ -306,8 +306,8 @@ declare function validator:field-on-correct-type($field as node(), $context as m
     let $type-name := 
         if ($field/ancestor::selection-set[1]/parent::field) 
         then $field/ancestor::selection-set[1]/parent::field/name/@value/string()
-        else if ($field/ancestor::selection-set[1]/parent::*[local-name()=('fragment-definition', 'inline-fragment')])
-        then $field/ancestor::selection-set[1]/parent::*[local-name()=('fragment-definition', 'inline-fragment')]/type-condition/named-type/name/@value/string()
+        else if ($field/ancestor::selection-set[1]/parent::*[local-name()=('fragment_definition', 'inline_fragment')])
+        then $field/ancestor::selection-set[1]/parent::*[local-name()=('fragment_definition', 'inline_fragment')]/type-condition/named-type/name/@value/string()
         else ()
     let $type := 
         if ($validator:SCHEMA/gxqls:Query/gxqls:fields/gxqls:field[@name/string() = $type-name]) 
@@ -567,8 +567,8 @@ declare function validator:known-field-argument-name($argument as node(), $conte
     let $type-name := 
         if ($field/ancestor::selection-set[1]/parent::field) 
         then $field/ancestor::selection-set[1]/parent::field/name/@value/string()
-        else if ($field/ancestor::selection-set[1]/parent::*[local-name()=('fragment-definition', 'inline-fragment')])
-        then $field/ancestor::selection-set[1]/parent::*[local-name()=('fragment-definition', 'inline-fragment')]/type-condition/named-type/name/@value/string()
+        else if ($field/ancestor::selection-set[1]/parent::*[local-name()=('fragment_definition', 'inline_fragment')])
+        then $field/ancestor::selection-set[1]/parent::*[local-name()=('fragment_definition', 'inline_fragment')]/type-condition/named-type/name/@value/string()
         else ()
 
     let $schema-type := $validator:SCHEMA/gxqls:types/child::*[@name/string() = $type-name]
@@ -631,7 +631,7 @@ declare function validator:executable-definitions($definitions as node(), $conte
 
     for $definition in $definitions/child::*
     return
-        if (not($definition/name() = ('operation-definition', 'fragment-definition')))
+        if (not($definition/name() = ('operation-definition', 'fragment_definition')))
         then
             (
                 let $executable := fn:tokenize($definition/name(), '-')[1]
@@ -698,25 +698,25 @@ declare function validator:known-directive($directive as node(), $context as map
     A GraphQL document is only valid if all `...Fragment` fragment spreads refer
     to fragments defined in the same document.
 :)
-declare function validator:known-fragment-names($fragment-spread as node(), $context as map:map)
+declare function validator:known-fragment-names($fragment_spread as node(), $context as map:map)
 {
     (
-        xdmp:log('[validator:known-fragment-names] $fragment-spread: ', 'fine')
-        ,xdmp:log($fragment-spread, 'fine')
+        xdmp:log('[validator:known-fragment-names] $fragment_spread: ', 'fine')
+        ,xdmp:log($fragment_spread, 'fine')
         ,for $key in map:keys($context)[not(. = 'node')] return map:get($context, $key)!xdmp:log('[validator:known-fragment-names] '||$key||': '||.)
     ),
 
-    let $fragment-spread-name := $fragment-spread/name/@value/string()
+    let $fragment_spread-name := $fragment_spread/name/@value/string()
     let $node := map:get($context, 'node')
-    let $available-fragments := $node//fragment-definition/name/@value/string()
+    let $available-fragments := $node//fragment_definition/name/@value/string()
     return 
     (
-        if (not($fragment-spread-name = $available-fragments))
+        if (not($fragment_spread-name = $available-fragments))
         then 
         (
-            let $error-message := "Unknown fragment ["||$fragment-spread-name||"]."
-            let $line := ($fragment-spread/name/location/token)[1]/@line/string()
-            let $column := ($fragment-spread/name/location/token)[1]/@column/string()
+            let $error-message := "Unknown fragment ["||$fragment_spread-name||"]."
+            let $line := ($fragment_spread/name/location/token)[1]/@line/string()
+            let $column := ($fragment_spread/name/location/token)[1]/@column/string()
             let $error-location := array-node { object-node {"line": xs:int($line), "column": xs:int($column)}}
             return
             xdmp:set($validator:GRAPHQL-ERRORS, ($validator:GRAPHQL-ERRORS, validator:error('KNOWN-FRAGMENT-NAME', $error-message, $error-location)))
@@ -756,16 +756,16 @@ declare function validator:known-type-name($named-type as node(), $context as ma
     else ()
 };
 
-declare function validator:no-fragment-cycles($fragment-definition as node(), $context as map:map)
+declare function validator:no-fragment-cycles($fragment_definition as node(), $context as map:map)
 {
     (
-        xdmp:log('[validator:no-fragment-cycles] $fragment-definition: ', 'fine')
-        ,xdmp:log($fragment-definition, 'fine')
+        xdmp:log('[validator:no-fragment-cycles] $fragment_definition: ', 'fine')
+        ,xdmp:log($fragment_definition, 'fine')
         ,for $key in map:keys($context)[not(. = 'node')] return map:get($context, $key)!xdmp:log('[validator:no-fragment-cycles] '||$key||': '||.)
     ),
 
     let $node := map:get($context, 'node')
-    let $target-names := $fragment-definition/name/@value/string()
+    let $target-names := $fragment_definition/name/@value/string()
     return
     for $target-name in $target-names
         let $current-name := $target-name
@@ -789,7 +789,7 @@ declare function validator:no-fragment-cycles($fragment-definition as node(), $c
                         array-node 
                         {
                             for $step in $path-steps
-                            let $fragment := $node//fragment-definition[./name/@value/string() = $step]
+                            let $fragment := $node//fragment_definition[./name/@value/string() = $step]
                             let $line := ($fragment/name/location/token)[1]/@line/string()
                             let $column := ($fragment/name/location/token)[1]/@column/string()
                             return object-node {"line": xs:int($line), "column": xs:int($column)}
@@ -804,15 +804,15 @@ declare function validator:no-fragment-cycles($fragment-definition as node(), $c
 
 declare function validator:detect-cycles($fragment-name as xs:string, $current-name as xs:string, $node as node(), $path as xs:string*, $cycle-path as map:map, $visited as map:map) 
 {
-    let $child-fragment-names := $node//fragment-definition[./name/@value/string() = $current-name]//fragment-spread/name/@value/string()[not(. = map:keys($visited))]
+    let $child-fragment-names := $node//fragment_definition[./name/@value/string() = $current-name]//fragment_spread/name/@value/string()[not(. = map:keys($visited))]
     return
     (
         map:put($visited, $current-name, xs:boolean('true')),
         for $child-fragment-name in $child-fragment-names
-            let $child-fragment-definition := $node//fragment-definition[./name/@value/string() = $child-fragment-name]
+            let $child-fragment_definition := $node//fragment_definition[./name/@value/string() = $child-fragment-name]
             let $path := fn:string-join(($path, $child-fragment-name), '|')
             return
-                if ($child-fragment-definition//fragment-spread[./name/@value/string() = $fragment-name]) 
+                if ($child-fragment_definition//fragment_spread[./name/@value/string() = $fragment-name]) 
                 then map:put($cycle-path, $path, $fragment-name)
                 else validator:detect-cycles($fragment-name, $child-fragment-name, $node, $path, $cycle-path, $visited)
     )
@@ -841,30 +841,30 @@ declare function validator:no-undefined-variables($operation as node(), $context
     let $undefined-variables := $used-variables[not(./name/@value/string() = $defined-variable-names)]
     let $_ := validator:report-undefined-variables($operation, $undefined-variables)
 
-    let $fragment-spreads := $operation//fragment-spread
+    let $fragment_spreads := $operation//fragment_spread
     let $visited-fragments := map:map()
-    for $fragment-spread in $fragment-spreads
+    for $fragment_spread in $fragment_spreads
     return 
     (
-        map:put($visited-fragments, $fragment-spread/name/@value/string(), 'true'),
-        validator:no-undefined-variables-in-fragment($fragment-spreads, $defined-variable-names, $operation, $node, $visited-fragments)      
+        map:put($visited-fragments, $fragment_spread/name/@value/string(), 'true'),
+        validator:no-undefined-variables-in-fragment($fragment_spreads, $defined-variable-names, $operation, $node, $visited-fragments)      
     )
 };
 
 declare function validator:no-undefined-variables-in-fragment($fragment, $defined-variable-names, $operation, $node, $visited-fragments)
 {
     let $fragment-name := $fragment/name/@value/string()
-    let $fragment-definition := $node/definitions/fragment-definition[./name/@value/string() = $fragment-name]
-    let $used-variables := $fragment-definition//argument//variable
+    let $fragment_definition := $node/definitions/fragment_definition[./name/@value/string() = $fragment-name]
+    let $used-variables := $fragment_definition//argument//variable
     let $undefined-variables := $used-variables[not(./name/@value/string() = $defined-variable-names)]    
     let $_ := validator:report-undefined-variables($operation, $undefined-variables)
 
-    let $fragment-spreads := $fragment-definition//fragment-spread
-    for $fragment-spread in $fragment-spreads[not(./name/@value/string() = map:keys($visited-fragments))]
+    let $fragment_spreads := $fragment_definition//fragment_spread
+    for $fragment_spread in $fragment_spreads[not(./name/@value/string() = map:keys($visited-fragments))]
     return 
     (
-        map:put($visited-fragments, $fragment-spread/name/@value/string(), 'true'),
-        validator:no-undefined-variables-in-fragment($fragment-spreads, $defined-variable-names, $operation, $node, $visited-fragments)      
+        map:put($visited-fragments, $fragment_spread/name/@value/string(), 'true'),
+        validator:no-undefined-variables-in-fragment($fragment_spreads, $defined-variable-names, $operation, $node, $visited-fragments)      
     )
 };
 
@@ -914,13 +914,13 @@ declare function validator:no-unused-variables($operation as node(), $context as
     let $operation-name := $operation/name/@value/string()
     let $visited-fragments := map:map()
     let $defined-variables := $operation//variable/name/@value/string()
-    let $operation-fragments := $operation//fragment-spread/name/@value/string()
+    let $operation-fragments := $operation//fragment_spread/name/@value/string()
     let $referenced-fragments :=
         for $operation-fragment in $operation-fragments
         return validator:get-indirect-fragments($node, $operation-fragment, $visited-fragments)
     
     let $used-variables := $operation//selection-set//variable/name/@value/string()
-    let $used-variables := ($used-variables, $node//fragment-definition[./name/@value/string() = ($operation-fragments, $referenced-fragments)]//variable/name/@value/string())
+    let $used-variables := ($used-variables, $node//fragment_definition[./name/@value/string() = ($operation-fragments, $referenced-fragments)]//variable/name/@value/string())
 
     for $unused-variable-name in $defined-variables[not(. = $used-variables)]
         let $unused-variable := $operation//variable[./name/@value/string() = $unused-variable-name]
@@ -948,15 +948,15 @@ declare function validator:no-unused-fragments($document as node(), $context as 
     ),
 
     let $visited-fragments := map:map()
-    let $operation-fragment-names := $document//operation-definition//fragment-spread/name/@value/string()
+    let $operation-fragment-names := $document//operation-definition//fragment_spread/name/@value/string()
     let $used-fragment-names :=
         for $operation-fragment-name in $operation-fragment-names
         return validator:get-indirect-fragments($document, $operation-fragment-name, $visited-fragments)
     let $used-fragment-names := ($operation-fragment-names, $used-fragment-names)
-    let $defined-fragment-names := $document//fragment-definition/name/@value/string()
+    let $defined-fragment-names := $document//fragment_definition/name/@value/string()
 
     for $unused-fragment-name in $defined-fragment-names[not(. = $used-fragment-names)]
-        let $unused-fragment := $document//fragment-definition[./name/@value/string() = $unused-fragment-name]
+        let $unused-fragment := $document//fragment_definition[./name/@value/string() = $unused-fragment-name]
         let $error-message := "Fragment ["||$unused-fragment-name||"] is never used."
         let $line := ($unused-fragment/name/location/token)[1]/@line/string()
         let $column := ($unused-fragment/name/location/token)[1]/@column/string()
@@ -968,7 +968,7 @@ declare function validator:no-unused-fragments($document as node(), $context as 
 declare function validator:get-indirect-fragments($node, $fragment-name, $visited-fragments)
 {
     let $_ := map:put($visited-fragments, $fragment-name, 'true')
-    let $used-fragments := $node//fragment-definition[./name/@value/string() = $fragment-name]//fragment-spread/name/@value/string()
+    let $used-fragments := $node//fragment_definition[./name/@value/string() = $fragment-name]//fragment_spread/name/@value/string()
     return ($used-fragments, $used-fragments[not(. = map:keys($visited-fragments))]!validator:get-indirect-fragments($node, ., $visited-fragments))
 };
 
@@ -979,12 +979,12 @@ declare function validator:get-indirect-fragments($node, $fragment-name, $visite
     be true: if there is a non-empty intersection of the possible parent types,
     and possible types which pass the type condition.
 :)
-declare function validator:possible-fragment-spread($fragment as node(), $context as map:map)
+declare function validator:possible-fragment_spread($fragment as node(), $context as map:map)
 {
     (
-        xdmp:log('[validator:possible-fragment-spread] $fragment: ', 'fine')
+        xdmp:log('[validator:possible-fragment_spread] $fragment: ', 'fine')
         ,xdmp:log($fragment, 'fine')
-        ,for $key in map:keys($context)[not(. = 'node')] return map:get($context, $key)!xdmp:log('[validator:possible-fragment-spread] '||$key||': '||.)
+        ,for $key in map:keys($context)[not(. = 'node')] return map:get($context, $key)!xdmp:log('[validator:possible-fragment_spread] '||$key||': '||.)
     ),
     
     let $node := map:get($context, 'node')
@@ -1005,26 +1005,26 @@ declare function validator:possible-fragment-spread($fragment as node(), $contex
             let $parent-field-name := $fragment/ancestor::selection-set[1]/parent::field/name/@value/string()
             return fn:distinct-values($validator:SCHEMA//gxqls:field[@name/string()=$parent-field-name]/gxqls:Type/@name/string())
         )
-        else if ($fragment/ancestor::selection-set[1]/parent::*[local-name()=('fragment-definition', 'inline-fragment')])
-        then $fragment/ancestor::selection-set[1]/parent::*[local-name()=('fragment-definition', 'inline-fragment')]/type-condition/named-type/name/@value/string()
+        else if ($fragment/ancestor::selection-set[1]/parent::*[local-name()=('fragment_definition', 'inline_fragment')])
+        then $fragment/ancestor::selection-set[1]/parent::*[local-name()=('fragment_definition', 'inline_fragment')]/type-condition/named-type/name/@value/string()
         else if ($fragment/ancestor::selection-set[1]/parent::*[local-name()=('operation-definition')])
         then ()
-        else fn:error((), 'validator:possible-fragment-spread EXCEPTION', ("500", "Internal server error", "Invalid fragment kind"))
+        else fn:error((), 'validator:possible-fragment_spread EXCEPTION', ("500", "Internal server error", "Invalid fragment kind"))
     
     let $fragment-type :=
         switch ($fragment-kind)
-        case 'fragment-spread'
+        case 'fragment_spread'
         return
         (
-            let $fragment-definition := $node//fragment-definition[./name/@value/string() = $fragment-name][1]
-            return $fragment-definition/type-condition/named-type/name/@value/string()
+            let $fragment_definition := $node//fragment_definition[./name/@value/string() = $fragment-name][1]
+            return $fragment_definition/type-condition/named-type/name/@value/string()
         ) 
-        case 'inline-fragment'
+        case 'inline_fragment'
         return
             $fragment/type-condition/named-type/name/@value/string()
         default
         return
-            fn:error((), 'validator:possible-fragment-spread EXCEPTION', ("500", "Internal server error", "Invalid fragment kind"))
+            fn:error((), 'validator:possible-fragment_spread EXCEPTION', ("500", "Internal server error", "Invalid fragment kind"))
     let $_ := xdmp:log('$parent-type:   '||xdmp:describe($parent-type, (),()))
     let $_ := xdmp:log('$fragment-type: '||xdmp:describe($fragment-type, (),()))
     return
@@ -1093,8 +1093,8 @@ declare function validator:provided-required-arguments($field as node(), $contex
     let $parent-type-name := 
         if ($field/ancestor::selection-set[1]/parent::field) 
         then $field/ancestor::selection-set[1]/parent::field/name/@value/string()
-        else if ($field/ancestor::selection-set[1]/parent::*[local-name()=('fragment-definition', 'inline-fragment')])
-        then $field/ancestor::selection-set[1]/parent::*[local-name()=('fragment-definition', 'inline-fragment')]/type-condition/named-type/name/@value/string()
+        else if ($field/ancestor::selection-set[1]/parent::*[local-name()=('fragment_definition', 'inline_fragment')])
+        then $field/ancestor::selection-set[1]/parent::*[local-name()=('fragment_definition', 'inline_fragment')]/type-condition/named-type/name/@value/string()
         else ()
     let $parent-field-type := 
         if ($validator:SCHEMA/gxqls:Query/gxqls:fields/gxqls:field[@name/string() = $parent-type-name]) 
@@ -1169,8 +1169,8 @@ declare function validator:scalar-leaf($field as node(), $context as map:map)
     let $parent-type-name := 
         if ($field/ancestor::selection-set[1]/parent::field) 
         then $field/ancestor::selection-set[1]/parent::field/name/@value/string()
-        else if ($field/ancestor::selection-set[1]/parent::*[local-name()=('fragment-definition', 'inline-fragment')])
-        then $field/ancestor::selection-set[1]/parent::*[local-name()=('fragment-definition', 'inline-fragment')]/type-condition/named-type/name/@value/string()
+        else if ($field/ancestor::selection-set[1]/parent::*[local-name()=('fragment_definition', 'inline_fragment')])
+        then $field/ancestor::selection-set[1]/parent::*[local-name()=('fragment_definition', 'inline_fragment')]/type-condition/named-type/name/@value/string()
         else ()
     let $parent-field-type := 
         if ($validator:SCHEMA/gxqls:Query/gxqls:fields/gxqls:field[@name/string() = $parent-type-name]) 
@@ -1340,8 +1340,8 @@ declare function validator:values-of-correct-type($arg as node(), $context as ma
     let $parent-type-name := 
         if ($field/ancestor::selection-set[1]/parent::field) 
         then $field/ancestor::selection-set[1]/parent::field/name/@value/string()
-        else if ($field/ancestor::selection-set[1]/parent::*[local-name()=('fragment-definition', 'inline-fragment')])
-        then $field/ancestor::selection-set[1]/parent::*[local-name()=('fragment-definition', 'inline-fragment')]/type-condition/named-type/name/@value/string()
+        else if ($field/ancestor::selection-set[1]/parent::*[local-name()=('fragment_definition', 'inline_fragment')])
+        then $field/ancestor::selection-set[1]/parent::*[local-name()=('fragment_definition', 'inline_fragment')]/type-condition/named-type/name/@value/string()
         else if ($field/ancestor::selection-set[1]/parent::*[local-name()=('operation-definition')])
         then $field-name
         else ()
@@ -1649,13 +1649,13 @@ declare function validator:get-field-details($field as node(), $variable-name as
     let $parent-field := 
         if ($field/local-name()='directive') 
         then $field
-        else $field/ancestor::*[local-name()='field' or local-name()='fragment-definition'][position()=1]
+        else $field/ancestor::*[local-name()='field' or local-name()='fragment_definition'][position()=1]
     let $parent-field := if ($parent-field) then $parent-field else $field/ancestor::*[local-name()='selection-set'][position()=1]
     let $parent-field-name := 
         switch ($parent-field/local-name())
         case 'field'
             return $parent-field/name/@value/string()
-        case 'fragment-definition'
+        case 'fragment_definition'
             return $parent-field/type-condition/named-type/name/@value/string()
         case 'selection-set'
             return $field-name
@@ -1667,7 +1667,7 @@ declare function validator:get-field-details($field as node(), $variable-name as
     let $schema-arg := 
         switch ($parent-field/local-name())
         case 'field'
-        case 'fragment-definition'
+        case 'fragment_definition'
             return $validator:SCHEMA//gxqls:Type[fn:upper-case(@name)=fn:upper-case($parent-field-name)]//gxqls:Arg[@name=$argument-name and ./ancestor::*[local-name()='field']/@name/string()=$field-name]
         case 'selection-set'
             return 

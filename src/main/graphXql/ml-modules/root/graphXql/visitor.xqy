@@ -109,9 +109,9 @@ declare function visit:match($node as node(), $entity) as node()
             return xdmp:to-json($json)
     )
 
-    case 'fragment-definition' (: should be resolved when visiting selection-sets :)
+    case 'fragment_definition' (: should be resolved when visiting selection-sets :)
     return 
-        fn:error((), 'VISITOR EXCEPTION', ("500", "Internal server error", "fragment-definition should be resolved when visiting selection-sets"))
+        fn:error((), 'VISITOR EXCEPTION', ("500", "Internal server error", "fragment_definition should be resolved when visiting selection-sets"))
     default 
     return 
         fn:error((), 'VISITOR EXCEPTION', ("500", "Internal server error", "unexpected token kind: "||$node/name()))
@@ -157,11 +157,11 @@ declare function visit:include-skip-fields($node as node(), $entity) as node()*
                 $field
     ),
     (
-        for $fragment-spread in $node/fragment-spread
-        let $_ := xdmp:log('[visit:list-fields] $fragment-spread: '||xdmp:describe($fragment-spread, (), ()), 'debug')
+        for $fragment_spread in $node/fragment_spread
+        let $_ := xdmp:log('[visit:list-fields] $fragment_spread: '||xdmp:describe($fragment_spread, (), ()), 'debug')
         return
-            if (visit:include-fragment($fragment-spread)) 
-            then visit:include-skip-fields(fn:root($node)//fragment-definition[./name/@value=$fragment-spread/name/@value]/selection-set, $entity)
+            if (visit:include-fragment($fragment_spread)) 
+            then visit:include-skip-fields(fn:root($node)//fragment_definition[./name/@value=$fragment_spread/name/@value]/selection-set, $entity)
             else ()
     )
 };
@@ -191,22 +191,22 @@ declare function visit:list-fields($node as node(), $entity) as node()*
 
     let $fields := visit:include-skip-fields($node, $entity)
     let $named-fragment-fields := 
-        for $fragment-spread in $node/fragment-spread
-        let $_ := xdmp:log('[visit:list-fields] $fragment-spread: '||xdmp:describe($fragment-spread, (), ()), 'debug')
+        for $fragment_spread in $node/fragment_spread
+        let $_ := xdmp:log('[visit:list-fields] $fragment_spread: '||xdmp:describe($fragment_spread, (), ()), 'debug')
         return
-            if (visit:include-fragment($fragment-spread)) 
-            then visit:include-skip-fields(fn:root($node)//fragment-definition[./name/@value=$fragment-spread/name/@value]/selection-set, $entity)
+            if (visit:include-fragment($fragment_spread)) 
+            then visit:include-skip-fields(fn:root($node)//fragment_definition[./name/@value=$fragment_spread/name/@value]/selection-set, $entity)
             else ()
-    let $inline-fragment-fields :=
-        for $inline-fragment in $node/inline-fragment
-        let $_ := xdmp:log('[visit:list-fields] $inline-fragment: '||xdmp:describe($inline-fragment, (), ()), 'debug')
+    let $inline_fragment-fields :=
+        for $inline_fragment in $node/inline_fragment
+        let $_ := xdmp:log('[visit:list-fields] $inline_fragment: '||xdmp:describe($inline_fragment, (), ()), 'debug')
         return
-            if ((disp:get-entity-type($entity) eq $inline-fragment/type-condition/named-type/name/@value/string()) 
-                and visit:include-fragment($inline-fragment))
-            then visit:include-skip-fields($inline-fragment/selection-set, $entity)
+            if ((disp:get-entity-type($entity) eq $inline_fragment/type-condition/named-type/name/@value/string()) 
+                and visit:include-fragment($inline_fragment))
+            then visit:include-skip-fields($inline_fragment/selection-set, $entity)
             else ()
     return 
-        ($fields, $named-fragment-fields, $inline-fragment-fields)
+        ($fields, $named-fragment-fields, $inline_fragment-fields)
 };
 
 declare function visit:get-variables($field as node()) as map:map

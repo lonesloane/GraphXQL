@@ -580,8 +580,8 @@
         <Directive name="skip">
             <locations>
                 <location>FIELD</location>
-                <location>FRAGMENT-SPREAD</location>
-                <location>INLINE-FRAGMENT</location>
+                <location>FRAGMENT_SPREAD</location>
+                <location>INLINE_FRAGMENT</location>
             </locations>
             <args>
                 <Arg name="if" nullable="false">
@@ -592,8 +592,8 @@
         <Directive name="include">
             <locations>
                 <location>FIELD</location>
-                <location>FRAGMENT-SPREAD</location>
-                <location>INLINE-FRAGMENT</location>
+                <location>FRAGMENT_SPREAD</location>
+                <location>INLINE_FRAGMENT</location>
             </locations>
             <args>
                 <Arg name="if" nullable="false">

@@ -219,7 +219,7 @@ declare function parser:parse-definition()
             case 'subscription' 
                 return parser:parse-operation-definition()
             case 'fragment' 
-                return parser:parse-fragment-definition()
+                return parser:parse-fragment_definition()
             case 'schema'
             case 'scalar'
             case 'type'
@@ -288,15 +288,15 @@ declare function parser:parse-operation-definition()
 
     TypeCondition : NamedType
 :)
-declare function parser:parse-fragment-definition()
+declare function parser:parse-fragment_definition()
 {
     (
-        xdmp:log('[parser:parse-fragment-definition]: '||xdmp:describe($TOKENS[$POS], (),()))
+        xdmp:log('[parser:parse-fragment_definition]: '||xdmp:describe($TOKENS[$POS], (),()))
     ),
 
     let $_ := parser:expect-keyword('fragment')
     return
-        <fragment-definition>
+        <fragment_definition>
             {parser:parse-fragment-name()}
             <type-condition>
             {
@@ -306,7 +306,7 @@ declare function parser:parse-fragment-definition()
             </type-condition>
             {parser:parse-directives((), xs:boolean('false'))}
             {parser:parse-selection-set()}
-        </fragment-definition>
+        </fragment_definition>
 };
 
 (: 
@@ -476,21 +476,21 @@ declare function parser:parse-fields-definition(){
         xdmp:log('[parser:parse-fields-definition]: '||xdmp:describe($TOKENS[$POS], (),()))
     ),
     
-    parser:many-optional($lex:BRACE_L-LABEL, parser:parse-field-definition#0, $lex:BRACE_R-LABEL)
+    parser:many-optional($lex:BRACE_L-LABEL, parser:parse-field_definition#0, $lex:BRACE_R-LABEL)
 };
 
 (: 
     FieldDefinition :
     - Description? Name ArgumentsDefinition? : Type Directives[Const]?
 :)
-declare function parser:parse-field-definition(){
+declare function parser:parse-field_definition(){
     (
-        xdmp:log('[parser:parse-field-definition]: '||xdmp:describe($TOKENS[$POS], (),()))
+        xdmp:log('[parser:parse-field_definition]: '||xdmp:describe($TOKENS[$POS], (),()))
     ),
     
     let $start:= $TOKENS[$POS]
     return 
-    <field-definition>
+    <field_definition>
         {parser:parse-description()}
         {parser:parse-name()}
         {parser:parse-arguments-definition()}
@@ -498,7 +498,7 @@ declare function parser:parse-field-definition(){
         {parser:parse-type-reference()}
         {parser:parse-directives((), xs:boolean('true'))}
         {parser:loc($start)}
-    </field-definition>
+    </field_definition>
 };
 
 (: 
@@ -1096,18 +1096,18 @@ declare function parser:parse-fragment()
     if (not($has-type-condition) and parser:peek($lex:NAME-LABEL)) 
     then
     (
-        <fragment-spread>
+        <fragment_spread>
             {parser:parse-fragment-name()}
             {parser:parse-directives((), xs:boolean('false'))}
-        </fragment-spread>
+        </fragment_spread>
     )
     else
     (
-        <inline-fragment>
+        <inline_fragment>
             <type-condition>{if ($has-type-condition) then parser:parse-named-type() else 'undefined'}</type-condition>
             {parser:parse-directives((), xs:boolean('false'))}
             {parser:parse-selection-set()}
-        </inline-fragment>
+        </inline_fragment>
     )
 };
 

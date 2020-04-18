@@ -49,7 +49,7 @@ let $map-vars := map:map() => map:with('withFriends', xs:boolean('true'))
 return xdmp:set($visit:VARIABLES, $map-vars)
 ,
 let $node := 
-    <inline-fragment>
+    <inline_fragment>
         <directives>
             <directive>
                 <name value="include"/>
@@ -65,7 +65,7 @@ let $node :=
                 </arguments>
             </directive>
         </directives>
-    </inline-fragment>
+    </inline_fragment>
 return
 (
     test:assert-true(visit:include-fragment($node))
@@ -76,7 +76,7 @@ let $map-vars := map:map() => map:with('withFriends', xs:boolean('false'))
 return xdmp:set($visit:VARIABLES, $map-vars)
 ,
 let $node := 
-    <inline-fragment>
+    <inline_fragment>
         <directives>
             <directive>
                 <name value="include"/>
@@ -92,7 +92,7 @@ let $node :=
                 </arguments>
             </directive>
         </directives>
-    </inline-fragment>
+    </inline_fragment>
 return
 (
     test:assert-false(visit:include-fragment($node))
@@ -301,7 +301,7 @@ let $node :=
                             <field>
                                 <name value="name"/>
                             </field>
-                            <inline-fragment>
+                            <inline_fragment>
                                 <type-condition>
                                     <named-type>
                                         <name value="Hero"/>
@@ -332,7 +332,7 @@ let $node :=
                                         </selection-set>
                                     </field>
                                 </selection-set>
-                            </inline-fragment>
+                            </inline_fragment>
                             <field>
                                 <name value="friends"/>
                                 <directives>
@@ -356,7 +356,7 @@ let $node :=
                                     </field>
                                 </selection-set>
                             </field>
-                            <fragment-spread>
+                            <fragment_spread>
                                 <name value="comparisonFields"/>
                                 <directives>
                                     <directive>
@@ -373,12 +373,12 @@ let $node :=
                                         </arguments>
                                     </directive>
                                 </directives>
-                            </fragment-spread>
+                            </fragment_spread>
                         </selection-set>
                     </field>
                 </selection-set>
             </operation-definition>
-            <fragment-definition>
+            <fragment_definition>
                 <name value="comparisonFields"/>
                 <type-condition>
                     <named-type>
@@ -398,7 +398,7 @@ let $node :=
                         </selection-set>
                     </field>
                 </selection-set>
-            </fragment-definition>
+            </fragment_definition>
         </definitions>
     </document>
 let $actual := visit:list-fields($node/definitions/operation-definition/selection-set/field/selection-set, $person-1)
@@ -519,7 +519,7 @@ let $node :=
 						<field>
 							<name value="name"/>
 						</field>
-						<inline-fragment>
+						<inline_fragment>
 							<type-condition>
 								<named-type>
 									<name value="Hero"/>
@@ -588,8 +588,8 @@ let $node :=
 									</selection-set>
 								</field>
 							</selection-set>
-						</inline-fragment>
-						<fragment-spread>
+						</inline_fragment>
+						<fragment_spread>
 							<name value="comparisonFields"/>
 							<directives>
 								<directive>
@@ -606,12 +606,12 @@ let $node :=
 									</arguments>
 								</directive>
 							</directives>
-						</fragment-spread>
+						</fragment_spread>
 					</selection-set>
 				</field>
 			</selection-set>
 		</operation-definition>
-		<fragment-definition>
+		<fragment_definition>
 			<name value="comparisonFields"/>
 			<type-condition>
 				<named-type>
@@ -631,7 +631,7 @@ let $node :=
 					</selection-set>
 				</field>
 			</selection-set>
-		</fragment-definition>
+		</fragment_definition>
 	</definitions>
 </document>
 let $actual := visit:list-fields($node/definitions/operation-definition/selection-set/field/selection-set, $person-1)
