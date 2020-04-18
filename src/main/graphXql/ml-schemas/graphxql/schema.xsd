@@ -220,22 +220,24 @@
 
   <xs:complexType name="Directive">
     <xs:all>
+      <xs:element name="description" type="xs:string" minOccurs="0" />
       <xs:element name="locations" minOccurs="1">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="location" type="gxqls:DirectiveLocation" maxOccurs="unbounded" />
+            <xs:element name="location" type="gxqls:DirectiveLocation" maxOccurs="unbounded" minOccurs="1" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-      <xs:element name="args" minOccurs="0">
+      <xs:element name="args" minOccurs="1">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="Arg" type="gxqls:Arg" maxOccurs="unbounded" />
+            <xs:element name="Arg" type="gxqls:Arg" maxOccurs="unbounded" minOccurs="1" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
     </xs:all>
     <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="isRepeatable" type="xs:boolean" use="required" />
   </xs:complexType>
 
   <xs:simpleType name="DirectiveLocation">
@@ -244,10 +246,20 @@
       <xs:enumeration value="MUTATION" />
       <xs:enumeration value="SUBSCRIPTION" />
       <xs:enumeration value="FIELD" />
-      <xs:enumeration value="FRAGMENT-DEFINITION" />
-      <xs:enumeration value="FRAGMENT-SPREAD" />
-      <xs:enumeration value="INLINE-FRAGMENT" />
-      <xs:enumeration value="VARIABLE-DEFINITION" />
+      <xs:enumeration value="FRAGMENT_DEFINITION" />
+      <xs:enumeration value="FRAGMENT_SPREAD" />
+      <xs:enumeration value="INLINE_FRAGMENT" />
+      <xs:enumeration value="SCHEMA" />
+      <xs:enumeration value="SCALAR" />
+      <xs:enumeration value="OBJECT" />
+      <xs:enumeration value="FIELD_DEFINITION" />
+      <xs:enumeration value="ARGUMENT_DEFINITION" />
+      <xs:enumeration value="INTERFACE" />
+      <xs:enumeration value="UNION" />
+      <xs:enumeration value="ENUM" />
+      <xs:enumeration value="ENUM_VALUE" />
+      <xs:enumeration value="INPUT_OBJECT" />
+      <xs:enumeration value="INPUT_FIELD_DEFINITION" />
     </xs:restriction>
   </xs:simpleType>
 

@@ -140,7 +140,7 @@ let $expected :=
 (
     xdmp:to-json(xdmp:from-json-string('{"rule":"KNOWN-DIRECTIVE", "message":"Directive [include] may not be used on [QUERY].", "locations":[{"line":2, "column":27}]}'))
     ,xdmp:to-json(xdmp:from-json-string('{"rule":"KNOWN-DIRECTIVE", "message":"Directive [onQuery] may not be used on [FIELD].", "locations":[{"line":3, "column":11}]}'))
-    ,xdmp:to-json(xdmp:from-json-string('{"rule":"KNOWN-DIRECTIVE", "message":"Directive [onQuery] may not be used on [FRAGMENT-SPREAD].", "locations":[{"line":4, "column":14}]}'))
+    ,xdmp:to-json(xdmp:from-json-string('{"rule":"KNOWN-DIRECTIVE", "message":"Directive [onQuery] may not be used on [FRAGMENT_SPREAD].", "locations":[{"line":4, "column":14}]}'))
     ,xdmp:to-json(xdmp:from-json-string('{"rule":"KNOWN-DIRECTIVE", "message":"Directive [onQuery] may not be used on [MUTATION].", "locations":[{"line":7, "column":15}]}'))
 )
 return
@@ -148,7 +148,7 @@ return
     test:assert-equal(4, fn:count($actual/errors[./rule= $RULE]))
     ,test:assert-equal($expected[1]/node(), $actual/errors[./rule= $RULE][fn:contains(./message, 'QUERY')])
     ,test:assert-equal($expected[2]/node(), $actual/errors[./rule= $RULE][fn:contains(./message, 'FIELD')])
-    ,test:assert-equal($expected[3]/node(), $actual/errors[./rule= $RULE][fn:contains(./message, 'FRAGMENT-SPREAD')])
+    ,test:assert-equal($expected[3]/node(), $actual/errors[./rule= $RULE][fn:contains(./message, 'FRAGMENT_SPREAD')])
     ,test:assert-equal($expected[4]/node(), $actual/errors[./rule= $RULE][fn:contains(./message, 'MUTATION')])
 )
 ,

@@ -35,8 +35,9 @@ declare function disp:get-field-resolver($entity as element(), $field-name as xs
         case $o as element(*, gxqli:__Schema) return intro:schema-field-resolver($field-name)
         case $o as element(*, gxqli:__Type) return intro:type-field-resolver($field-name)
         case $o as element(*, gxqli:__Field) return intro:field-field-resolver($field-name)
-        case $o as element(*, gxqli:__InputValue  ) return intro:input-value-field-resolver($field-name)
-        case $o as element(*, gxqli:__EnumValue  ) return intro:enum-value-field-resolver($field-name)
+        case $o as element(*, gxqli:__InputValue) return intro:input-value-field-resolver($field-name)
+        case $o as element(*, gxqli:__EnumValue) return intro:enum-value-field-resolver($field-name)
+        case $o as element(*, gxqli:__Directive) return intro:directive-field-resolver($field-name)
         (: EXECUTION :)
         default return gxqlr:get-field-resolver($entity, $field-name)
 };

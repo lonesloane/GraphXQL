@@ -110,11 +110,33 @@ declare function intro:build-schema-subscriptionType() as element(*, gxqli:__Typ
 
 declare function intro:build-schema-directives()
 {
-    ()
-    (: element gxqli:directives 
+    element gxqli:directives 
     {
-        (: TODO :)
-    } :)
+        for $directive in $intro:SCHEMA//gxqls:directives/gxqls:Directive
+        return intro:build-directive($directive)
+    }
+};
+
+declare function intro:build-directive($directive as element(*, gxqls:Directive)) as element(*, gxqli:__Directive)
+{
+    element gxqli:__Directive
+    {
+        element gxqli:name {$directive/@name/string()},
+        element gxqli:description {$directive/gxqls:description/string()},
+        element gxqli:locations 
+        {
+            $directive/gxqls:locations/gxqls:location/string()!(element gxqli:__DirectiveLocation {.})
+        },
+        element gxqli:args 
+        {
+            for $arg in $directive/gxqls:args/gxqls:Arg
+            return intro:build-input-value($arg)
+        },
+        element gxqli:isRepeatable 
+        {
+            if ($directive/@isRepeatable/string()='true') then xs:boolean('true') else xs:boolean('false')
+        }
+    }
 };
 
 declare function intro:build-type($type) as element(*, gxqli:__Type)
@@ -225,7 +247,7 @@ declare function intro:build-type($type, $name as xs:string) as element(*, gxqli
     }
 };
 
-declare function intro:build-input-value($input-field as element(*, gxqls:InputField)) as element(*, gxqli:__InputValue)
+declare function intro:build-input-value($input-field) as element(*, gxqli:__InputValue)
 {
     element gxqli:__InputValue
     {
@@ -234,10 +256,14 @@ declare function intro:build-input-value($input-field as element(*, gxqls:InputF
         then element gxqli:description 
         {
             $input-field/gxqls:description/string()
-        } else (),
+        } 
+        else (),
         intro:build-type($input-field/gxqls:Type, 'type'),
         if ($input-field/@default)
-        then element gxqli:defaultValue {$input-field/@default/string()}
+        then element gxqli:defaultValue 
+        {
+            $input-field/@default/string()
+        }
         else ()
     }
 };
@@ -254,7 +280,7 @@ declare function intro:build-enum-value($enum-value as element(*,gxqls:EnumValue
         } else (),
         element gxqli:isDeprecated 
         {
-            if ($enum-value/@deprecated) then xs:boolean('true') else xs:boolean('false')
+            if ($enum-value/@deprecated/string() = 'true') then xs:boolean('true') else xs:boolean('false')
         },
         if ($enum-value/gxqls:deprecationReason)
         then element gxqli:deprecationReason {$enum-value/gxqls:deprecationReason/string()}
@@ -409,7 +435,16 @@ declare function intro:schema-subscriptionType-resolver($schema as element(*, gx
 
 declare function intro:schema-directives-resolver($schema as element(*, gxqli:__Schema), $var-map as map:map)
 {
-    $schema/gxqli:directives
+    if ($schema/gxqli:directives/*)
+    then 
+    (
+        let $array := json:array()
+        let $_ :=
+            for $value in ($schema/gxqli:directives/gxqli:__Directive)
+            return json:array-push($array, $value)
+        return $array        
+    )
+    else json:array()
 };
 
 declare function intro:type-field-resolver($field-name as xs:string) as xdmp:function
@@ -609,8 +644,7 @@ declare function intro:field-args-resolver($field as element(*, gxqli:__Field), 
                 return json:array-push($array, $item)
         return $array
     )
-    else json:array()
-        
+    else json:array()        
 };
 
 declare function intro:field-type-resolver($field as element(*, gxqli:__Field), $var-map as map:map) as element(*, gxqli:__Type)
@@ -696,4 +730,64 @@ declare function intro:enum-value-is-deprecated-resolver($enum-value as element(
 declare function intro:enum-value-deprecation-reason-resolver($enum-value as element(*, gxqli:__EnumValue), $var-map as map:map) as xs:string?
 {
     $enum-value/gxqli:deprecationReason/string()
+};
+
+declare function intro:directive-field-resolver($field-name as xs:string) as xdmp:function
+{
+    switch ($field-name)
+    case 'name'
+       return xdmp:function(xs:QName('intro:directive-name-resolver'))
+    case 'description'
+        return xdmp:function(xs:QName('intro:directive-description-resolver'))
+    case 'locations'
+        return xdmp:function(xs:QName('intro:directive-locations-resolver'))
+    case 'args'
+        return xdmp:function(xs:QName('intro:directive-args-resolver'))
+    case 'isRepeatable'
+        return xdmp:function(xs:QName('intro:directive-isRepeatable-resolver'))
+    default 
+        return fn:error((), 'DIRECTIVE FIELD RESOLVER EXCEPTION', ("500", "Internal server error", "unsupported field: "||$field-name))
+};
+
+declare function intro:directive-name-resolver($directive as element(*, gxqli:__Directive), $var-map as map:map) as xs:string
+{
+    $directive/gxqli:name/string()
+};
+
+declare function intro:directive-description-resolver($directive as element(*, gxqli:__Directive), $var-map as map:map) as xs:string?
+{
+    fn:head(($directive/gxqli:description/string(), ""))
+};
+
+declare function intro:directive-locations-resolver($directive as element(*, gxqli:__Directive), $var-map as map:map) 
+{
+    if ($directive/gxqli:locations/gxqli:__DirectiveLocation)
+    then
+    (
+        let $array := json:array()
+        let $_ :=
+            for $item in $directive/gxqli:locations/gxqli:__DirectiveLocation/string()
+                return json:array-push($array, $item)
+        return $array
+    )
+    else json:array()    
+};
+
+declare function intro:directive-args-resolver($directive as element(*, gxqli:__Directive), $var-map as map:map) 
+{
+    if ($directive/gxqli:args/*)
+    then
+    (
+        let $array := json:array()
+        let $_ :=
+            for $item in $directive/gxqli:args/gxqli:__InputValue
+                return json:array-push($array, $item)
+        return $array
+    )
+    else json:array()    
+};
+
+declare function intro:directive-isRepeatable-resolver($directive as element(*, gxqli:__Directive), $var-map as map:map) as xs:boolean
+{
+    $directive/gxqli:isRepeatable    
 };
