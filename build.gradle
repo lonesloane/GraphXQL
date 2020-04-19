@@ -39,7 +39,29 @@ configurations {
 }
 
 task bundleJar(type: Jar) {
-	from(files("./src/main")) 
+	from(
+    files("./src/main")
+  ) 
+  exclude(
+    "**/test/**"
+  )
+  exclude(
+    "**/ml-config/**"
+  )
+  exclude(
+    "**/ml-data/**"
+  )
+  exclude(
+    "**/resolvers/delegation-resolver.xqy",
+    "**/resolvers/document-resolver.xqy",
+    "**/resolvers/event-resolver.xqy",
+    "**/resolvers/export.xqy",
+    "**/resolvers/mutation-resolver.xqy",
+    "**/resolvers/person-resolver.xqy"
+  )
+  exclude(
+    "**/entities/**"
+  )
 	destinationDir file('build/libs/')
 	baseName = "graphXql"
 }
