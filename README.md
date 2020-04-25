@@ -50,7 +50,7 @@ Deploy XSD schemas required to define the types used internally by the library
 ./gradlew mlReloadModules
 ```
 
-Deploy the actual library and graphql endpoint (as a Marklogic Rest extension :smile:)
+Deploy the actual library, which includes the graphql service as a Marklogic Rest extension :smile:
 
 ```shell
 ./gradlew mlLoadData
@@ -61,15 +61,15 @@ Deploy the introspection graqhXql schema
 ### Setup
 
 To work, a GraphXQL service relies on a GraphXQL schema, i.e. the XML equivalent of the regular GraphQL schema based on the GraphQL SDL.
-Thus you need to define a GraphXQL XML schema to expose the types supported by your endpoint. Validity of the schema is checked against `SDL.xsd`
+Thus you need to define a GraphXQL XML schema to expose the types supported by your endpoint. Validity of the schema is checked against [`SDL.xsd`](src/main/graphXql/ml-schemas/graphxql/SDL.xsd)
 
-The library repository includes a sample schema `src/main/graphXQL/ml-schemas/graphxql/schema.xml` inspired from the StarWars schema used in the GraphQL.js library
+The library repository includes a sample schema [`schema.xml`](src/main/graphXQL/ml-schemas/graphxql/schema.xml) inspired from the StarWars schema used in the GraphQL.js library
 
 ## Implement your resolvers
 
-_All_ you have to do is to implement the resolvers which will "produce" your project specific data according to the `schema.xml` mentionned above and _export_ them in the module `export.xqy` which is used to connect your project specific implementation to the generic GraphXQL library.
+_All_ you have to do is to implement the resolvers which will "produce" your project specific data according to the [`schema.xml`](src/main/graphXql/ml-data/graphXql/schema.xml) mentionned above and _export_ them in the module [`export.xqy`](src/main/graphXql/ml-modules/root/graphXql/resolvers/export.xqy) which is used to connect your project specific implementation to the generic GraphXQL library.
 
-An example implementation can be found in the library repository `src/main/graphXql/ml-modules/root/graphXql/resolvers`
+An example implementation of [`resolvers`](src/main/graphXql/ml-modules/root/graphXql/resolvers) can be found in the library repository.
 
 ## Test your GraphQL service
 
