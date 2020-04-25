@@ -1,4 +1,4 @@
-![Logo of the project](https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/GraphQL_Logo.svg/240px-GraphQL_Logo.svg.png)
+<!-- ![GraphXQL Logo](https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/GraphQL_Logo.svg/240px-GraphQL_Logo.svg.png) -->
 
 # GraphXQL
 
