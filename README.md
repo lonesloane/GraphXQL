@@ -4,7 +4,7 @@
 
 > XQuery GraphQL service for Marklogic
 
-XQuery implementation of the GraphQL specification (http://spec.graphql.org/draft/), largely inspired from the javascript library GrapQL.js (https://github.com/graphql/graphql-js)
+XQuery implementation of the [GraphQL specification](http://spec.graphql.org/draft/), largely inspired from the javascript library [GraphQL.js](https://github.com/graphql/graphql-js)
 
 This library comes full featured with an actual endpoint, validation, execution and introspection.
 
