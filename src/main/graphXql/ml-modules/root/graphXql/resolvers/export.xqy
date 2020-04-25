@@ -57,6 +57,8 @@ declare function gxqlr:typename-resolver($entity as element()) as xs:string
 declare function gxqlr:typename-resolver($entity as element(), $var-map as map:map) as xs:string
 {
     typeswitch ($entity)
+        case $o as element(*, gxql:Hero) return 'Hero'
+        case $o as element(*, gxql:Foe) return 'Foe'
         case $o as element(*, gxql:Person) return 'Person'
         case $o as element(*, gxql:Event) return 'Event'
         case $o as element(*, gxql:Document) return 'Document'

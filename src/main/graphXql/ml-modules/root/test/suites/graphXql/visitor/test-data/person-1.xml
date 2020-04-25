@@ -3,22 +3,12 @@
     <height>180</height>
     <appearsIn>Return of the Jedi</appearsIn>
     <friends>
-        <person>
-            <id>6</id>
-        </person>
+        <id>6</id>
     </friends>
     <foes>
-        <person>
-            <id>2</id>
-        </person>
-        <person>
-            <id>3</id>
-        </person>
-        <person>
-            <id>4</id>
-        </person>
-        <person>
-            <id>5</id>
-        </person>
+        <id>2</id>
+        <id>3</id>
+        <id>4</id>
+        <id>5</id>
     </foes>
 </person>

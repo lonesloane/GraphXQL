@@ -149,7 +149,7 @@
 
     <directives>
 
-        <Directive name="skip">
+        <Directive name="skip" isRepeatable="false">
             <locations>
                 <location>FIELD</location>
                 <location>FRAGMENT_SPREAD</location>
@@ -162,7 +162,7 @@
             </args>
         </Directive>
 
-        <Directive name="include">
+        <Directive name="include" isRepeatable="false">
             <locations>
                 <location>FIELD</location>
                 <location>FRAGMENT_SPREAD</location>

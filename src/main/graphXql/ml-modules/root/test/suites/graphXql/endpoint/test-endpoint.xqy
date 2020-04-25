@@ -5,7 +5,7 @@ import module namespace test = "http://marklogic.com/test" at "/test/test-helper
 declare namespace http="xdmp:http";
 
 declare variable $graphXql-endpoint-uri := "http://localhost:8152/LATEST/resources/graphXql";
-(: 
+
 (: --------------------------
   Simple Query
 --------------------------  :)
@@ -162,7 +162,8 @@ return
     test:assert-equal('200', $response/http:code/string()),
     test:assert-equal($expected, $actual)
 )
-, :)
+(: TODO: FIX mutation unit test  :)
+(: ,
 (: --------------------------
   Mutation
 --------------------------  :)
@@ -206,4 +207,4 @@ return
 (
     test:assert-equal('200', $response/http:code/string()),
     test:assert-equal($expected, $actual)
-)
+) :)

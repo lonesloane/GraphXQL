@@ -48,21 +48,21 @@ declare function gxqlr:person-appearsIn-resolver($person as element(*, gxql:Pers
 
 declare function gxqlr:person-friends-resolver($person as element(*, gxql:Person), $var-map as map:map) as element(*, gxql:Person)*
 {
-    let $friend-ids := $person/friends/person/id/string()
+    let $friend-ids := $person/friends/id/string()
     let $person-uris := $friend-ids!fn:concat('/graphXql/person/', .)
     return $person-uris!fn:doc(.)/node()
 };
 
-declare function gxqlr:person-foes-resolver($person as element(*, gxql:Hero), $var-map as map:map) as element(*, gxql:Person)*
+declare function gxqlr:person-foes-resolver($person as element(*, gxql:Person), $var-map as map:map) as element(*, gxql:Person)*
 {
-    let $foe-ids := $person/foes/person/id/string()
+    let $foe-ids := $person/foes/id/string()
     let $person-uris := $foe-ids!fn:concat('/graphXql/person/', .)
     return $person-uris!fn:doc(.)/node()
 };
 
-declare function gxqlr:person-accomplices-resolver($person as element(*, gxql:Foe), $var-map as map:map) as element(*, gxql:Person)*
+declare function gxqlr:person-accomplices-resolver($person as element(*, gxql:Person), $var-map as map:map) as element(*, gxql:Person)*
 {
-    let $accomplice-ids := $person/accomplices/person/id/string()
+    let $accomplice-ids := $person/accomplices/id/string()
     let $person-uris := $accomplice-ids!fn:concat('/graphXql/person/', .)
     return $person-uris!fn:doc(.)/node()
 };

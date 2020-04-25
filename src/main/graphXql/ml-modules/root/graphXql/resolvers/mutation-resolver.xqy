@@ -2,6 +2,9 @@ xquery version "1.0-ml";
 
 module namespace gxqlr = "http://graph.x.ql/resolvers";
 
+import module namespace event = "http://graph.x.ql/resolvers" 
+    at "/graphXql/resolvers/event-resolver.xqy"; 
+
 import schema namespace gxql ="http://graph.x.ql" 
     at "/graphxql/entities/graphXql-types.xsd";
 
@@ -34,7 +37,19 @@ declare function gxqlr:createParticipant($variables as map:map) {
         }
     return 
     (
-        xdmp:document-insert($event-uri, $event, (), $collections), 
-        xdmp:commit()
+        xdmp:invoke-function
+        (
+            function() {
+                xdmp:document-insert($event-uri, $event, (), $collections), 
+                xdmp:commit()
+            },
+            <options xmlns="xdmp:eval">
+                <update>true</update>
+                <commit>auto</commit>
+                <isolation>different-transaction</isolation>
+                <prevent-deadlocks>false</prevent-deadlocks>
+            </options>
+        ),
+        gxqlr:event-entity-resolver($variables)
     )
 };

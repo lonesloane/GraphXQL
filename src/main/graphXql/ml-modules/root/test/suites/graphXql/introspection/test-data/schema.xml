@@ -577,7 +577,7 @@
     </types>
 
     <directives>
-        <Directive name="skip">
+        <Directive name="skip" isRepeatable="false">
             <locations>
                 <location>FIELD</location>
                 <location>FRAGMENT_SPREAD</location>
@@ -589,7 +589,7 @@
                 </Arg>
             </args>
         </Directive>
-        <Directive name="include">
+        <Directive name="include" isRepeatable="false">
             <locations>
                 <location>FIELD</location>
                 <location>FRAGMENT_SPREAD</location>
@@ -601,25 +601,45 @@
                 </Arg>
             </args>
         </Directive>
-        <Directive name="onQuery">
+        <Directive name="onQuery" isRepeatable="false">
             <locations>
                 <location>QUERY</location>
             </locations>
+            <args>
+                <Arg name="if" nullable="false">
+                    <Type name="Boolean" kind="Scalar" />
+                </Arg>
+            </args>
         </Directive>
-        <Directive name="onMutation">
+        <Directive name="onMutation" isRepeatable="false">
             <locations>
                 <location>MUTATION</location>
             </locations>
+            <args>
+                <Arg name="if" nullable="false">
+                    <Type name="Boolean" kind="Scalar" />
+                </Arg>
+            </args>
         </Directive>
-        <Directive name="onField">
+        <Directive name="onField" isRepeatable="false">
             <locations>
                 <location>FIELD</location>
             </locations>
+            <args>
+                <Arg name="if" nullable="false">
+                    <Type name="Boolean" kind="Scalar" />
+                </Arg>
+            </args>
         </Directive>
-        <Directive name="onVariableDefinition">
+        <Directive name="onVariableDefinition" isRepeatable="false">
             <locations>
-                <location>VARIABLE-DEFINITION</location>
+                <location>ARGUMENT_DEFINITION</location>
             </locations>
+            <args>
+                <Arg name="if" nullable="false">
+                    <Type name="Boolean" kind="Scalar" />
+                </Arg>
+            </args>
         </Directive>
     </directives>
 
