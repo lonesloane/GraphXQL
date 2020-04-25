@@ -63,7 +63,7 @@ Deploy the introspection graqhXql schema
 To work, a GraphXQL service relies on a GraphXQL schema, i.e. the XML equivalent of the regular GraphQL schema based on the GraphQL SDL.
 Thus you need to define a GraphXQL XML schema to expose the types supported by your endpoint. Validity of the schema is checked against [`SDL.xsd`](src/main/graphXql/ml-schemas/graphxql/SDL.xsd)
 
-The library repository includes a sample schema [`schema.xml`](src/main/graphXQL/ml-schemas/graphxql/schema.xml) inspired from the StarWars schema used in the GraphQL.js library
+The library repository includes a sample schema [`schema.xml`](src/main/graphXql/ml-data/graphXql/schema.xml) inspired from the StarWars schema used in the GraphQL.js library
 
 ## Implement your resolvers
 
@@ -217,8 +217,7 @@ publishing {
 
 ## Contributing
 
-If you'd like to contribute, please fork the repository and use a feature
-branch.
+This library is still in a fairly early stages, if you'd like to contribute, please fork the repository and use a feature branch.
 
 Pull requests are warmly welcome.
 
@@ -240,4 +239,4 @@ The code in this project is licensed under MIT license - see the [LICENSE](LICEN
 
 ## Acknowledgments
 
-- This work was made possible by...
+- A lot of inspiration was taken from the GraphQL.js implementation, especially the parser and the validation rules.
