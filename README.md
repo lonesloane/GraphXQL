@@ -6,9 +6,9 @@
 
 XQuery implementation of the [GraphQL specification](http://spec.graphql.org/draft/), largely inspired from the javascript library [GraphQL.js](https://github.com/graphql/graphql-js)
 
-This library comes full featured with an actual endpoint, validation, execution and introspection.
+This library provides a graphql service fully featured with validation, execution and introspection.
 
-Subscription is not supported.
+_Subscription is not yet supported._
 
 ### Prerequisites
 
@@ -20,47 +20,60 @@ In addition, if you want to deploy the library as an independent application (to
 
 To expose a GraphXQL service in your project, the recommended way is to import the library as a Gradle dependency.
 
-Simply add the following dependency to your project's build.gradle file:
+### Import and deploy
 
-```shell
+Simply add the following dependency to your project's `build.gradle` file:
+
+```groovy
+buildscript {
+  repositories {
+    jcenter()
+    mavenLocal()
+  }
+}
 dependencies {
-    ...
+...
   mlBundle "graph.x.ql:graphXql:1.0.0"
-  ...
+...
 }
 ```
 
 Next, run the following commands:
 
 ```shell
-gradlew mlReloadSchemas -i
+./gradlew mlReloadSchemas
 ```
 
 Deploy XSD schemas required to define the types used internally by the library
 
 ```shell
-gradlew mlReloadModules -i
+./gradlew mlReloadModules
 ```
 
-Deploy the actual library and graphql endpoint (as a Marklogic Rest extension ;-))
+Deploy the actual library and graphql endpoint (as a Marklogic Rest extension :smile:)
 
 ```shell
-gradlew mlLoadData -i
+./gradlew mlLoadData
 ```
 
 Deploy the introspection graqhXql schema
 
-### Initial Configuration
+### Setup
 
 To work, a GraphXQL service relies on a GraphXQL schema, i.e. the XML equivalent of the regular GraphQL schema based on the GraphQL SDL.
-Thus you need to define a GraphXQL XML schema to expose the types supported by your endpoint. Validity of the schema is checked against SDL.xsd
-The library includes a sample schema (src/main/graphXQL/ml-schemas/graphxql/schema.xml) inspired from the StarWars schema used in the GraphQL.js library
+Thus you need to define a GraphXQL XML schema to expose the types supported by your endpoint. Validity of the schema is checked against `SDL.xsd`
 
-## Usage example
+The library includes a sample schema `src/main/graphXQL/ml-schemas/graphxql/schema.xml` inspired from the StarWars schema used in the GraphQL.js library
 
-TODO
+## Implement your resolvers
 
-_For more examples and usage, please refer to the [Wiki][wiki]._
+_All_ you have to do is to implement the resolvers which will "produce" your project specific data according to the `schema.xml` mentionned above and _export_ them in the module `export.xqy` which is used to connect your project specific implementation to the generic GraphXQL library.
+
+An example of such an implementation can be found in the library repository.
+
+## Test your GraphQL service
+
+Once deployed, you can test the service by sending a valid graphQL query to the service endpoint or
 
 ## Developing
 
@@ -72,7 +85,7 @@ First, get the latest version of the project.
 git clone https://github.com/lonesloane/graphxql.git
 ```
 
-Review the content of the file "gradle-local.properties" and if needed update the targeted ports for the main application and the unit-test application.
+Review the content of the file `gradle-local.properties` and if needed update the targeted ports for the main application and the unit-test application.
 You should also review the user and password used for the deployment.
 
 Next, deploy the application.
@@ -112,9 +125,9 @@ When you are satisfied with the changes on your local environment, you can choos
 gradlew publish -Pversion=YOUR_VERSION_NUMBER -i
 ```
 
-as defined in the build.gradle file:
+as defined in the `build.gradle` file:
 
-```
+```groovy
 publishing {
     repositories {
         maven {
@@ -133,10 +146,6 @@ publishing {
     }
 }
 ```
-
-## Features
-
-TODO
 
 ## Contributing
 

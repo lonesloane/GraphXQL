@@ -8,7 +8,6 @@ import module namespace gxqlr = "http://graph.x.ql/resolvers"
     "/graphXql/resolvers/event-resolver.xqy",
     "/graphXql/resolvers/document-resolver.xqy",
     "/graphXql/resolvers/delegation-resolver.xqy",
-    "/graphXql/resolvers/search-resolver.xqy",
     "/graphXql/resolvers/mutation-resolver.xqy";
 
 import schema namespace gxql = "http://graph.x.ql" 
@@ -21,7 +20,6 @@ declare function gxqlr:get-entity-resolver($entity-name as xs:string) as xdmp:fu
     else if ($entity-name eq 'event')       then xdmp:function(xs:QName('gxqlr:event-entity-resolver'))
     else if ($entity-name eq 'document')    then xdmp:function(xs:QName('gxqlr:document-entity-resolver'))
     else if ($entity-name eq 'delegation')  then xdmp:function(xs:QName('gxqlr:delegation-entity-resolver'))
-    else if ($entity-name eq 'search')      then xdmp:function(xs:QName('gxqlr:search-entity-resolver'))
     else  fn:error((), 'RESOLVER EXCEPTION', ("500", "Internal server error", "unexpected entity name: ", $entity-name))
 };
 

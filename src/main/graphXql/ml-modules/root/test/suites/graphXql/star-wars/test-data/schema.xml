@@ -1,5 +1,4 @@
 <Schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://graph.x.qls" xmlns:gxqls="http://graph.x.qls">
-    <!-- TODO: remove one.oecd.org from namespaces -->
 
     <Query name="Query">
         <fields>
