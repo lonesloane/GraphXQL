@@ -63,17 +63,86 @@ Deploy the introspection graqhXql schema
 To work, a GraphXQL service relies on a GraphXQL schema, i.e. the XML equivalent of the regular GraphQL schema based on the GraphQL SDL.
 Thus you need to define a GraphXQL XML schema to expose the types supported by your endpoint. Validity of the schema is checked against `SDL.xsd`
 
-The library includes a sample schema `src/main/graphXQL/ml-schemas/graphxql/schema.xml` inspired from the StarWars schema used in the GraphQL.js library
+The library repository includes a sample schema `src/main/graphXQL/ml-schemas/graphxql/schema.xml` inspired from the StarWars schema used in the GraphQL.js library
 
 ## Implement your resolvers
 
 _All_ you have to do is to implement the resolvers which will "produce" your project specific data according to the `schema.xml` mentionned above and _export_ them in the module `export.xqy` which is used to connect your project specific implementation to the generic GraphXQL library.
 
-An example of such an implementation can be found in the library repository.
+An example implementation can be found in the library repository `src/main/graphXql/ml-modules/root/graphXql/resolvers`
 
 ## Test your GraphQL service
 
-Once deployed, you can test the service by sending a valid graphQL query to the service endpoint or
+Once deployed, you can test the service by sending a valid graphQL query to the service endpoint
+
+```xquery
+xquery version "1.0-ml";
+declare namespace http="xdmp:http";
+
+declare variable $graphXql-endpoint-uri := "http://localhost:8152/LATEST/resources/graphXql";
+
+let $query :=
+  '{
+    person(id: 1) {
+      name
+      friends {
+        name
+      }
+    }
+  }'
+
+let $payload := object-node {
+  "query": $query
+}
+
+return xdmp:http-post(
+        $graphXql-endpoint-uri,
+        <options xmlns="xdmp:http">
+            <headers>
+              <content-type>application/json</content-type>
+            </headers>
+            <authentication method="digest">
+                <username>admin</username>
+                <password>admin</password>
+            </authentication>
+        </options>,
+        $payload)
+```
+
+If everything is setup correctly, the above code should return
+
+```xml
+<response xmlns="xdmp:http">
+  <code>200</code>
+  <message>OK</message>
+  <headers>
+    <content-type>application/json; charset=UTF-8</content-type>
+    <server>MarkLogic</server>
+    <content-length>63</content-length>
+    <connection>Keep-Alive</connection>
+    <keep-alive>timeout=5</keep-alive>
+  </headers>
+</response>
+```
+
+```json
+{
+  "data": {
+    "person": {
+      "name": "Luke",
+      "friends": {
+        "name": "Daisy"
+      }
+    }
+  }
+}
+```
+
+Also, if you are working with a client application such as GraphiQL or Insomnia, you should also benefit from the introspection and have access to all the types exposed by your service.
+
+[![query](docs/screenshots/query.png)](docs/screenshots/query.png)
+
+[![query](docs/screenshots/introspection.png)](docs/screenshots/introspection.png)
 
 ## Developing
 
