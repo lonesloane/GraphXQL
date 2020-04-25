@@ -4,7 +4,7 @@ import module namespace test = "http://marklogic.com/test" at "/test/test-helper
 import module namespace visit = "http://graph.x.ql/visitor" at "/graphXql/visitor.xqy";
 import module namespace parser = "http://graph.x.ql/parser" at "/graphXql/parser.xqy";
 
-import schema namespace gxqls="http://graph.x.qls" at "/graphxql/schema.xsd";
+import schema namespace gxqls="http://graph.x.qls" at "/graphxql/SDL.xsd";
 declare variable $SCHEMA as element(*, gxqls:Schema) := fn:doc('/graphXql/schema.xml')/gxqls:Schema;
 
 (: XSD VALIDATION :)
