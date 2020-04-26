@@ -20,43 +20,53 @@ In addition, if you want to deploy the library as an independent application (to
 
 To expose a GraphXQL service in your project, the recommended way is to import the library as a Gradle dependency.
 
-### Import and deploy
+### Adding GraphXQL to your project
 
-Simply add the following dependency to your project's `build.gradle` file:
+Assuming you're using ml-gradle, you can easily add a grphQL service to your application.
 
-```groovy
-buildscript {
-  repositories {
-    jcenter()
-    mavenLocal()
-  }
-}
-dependencies {
-...
-  mlBundle "graph.x.ql:graphXql:1.0.0"
-...
-}
-```
+As this project hasn't been published to the [jcenter](https://bintray.com/bintray/jcenter) repository yet, you'll first
+need to publish a copy of this project to your local Maven repository, which defaults to ~/.m2/repository. 
+
+To do so, clone this repository and run the following command in the project's root directory:
+
+    ./gradlew publishToMavenLocal -Pversion=1.0.0-SNAPSHOT
+    
+You can verify that the artifacts were published successfully by looking in the 
+~/.m2/repository/graph/x/ql/graphXql directory.
+
+Now that you've published GraphXQL locally, you can add it to your own application. You just need to add 
+the following to your `build.gradle` (again, this depends on using ml-gradle).
+
+First, in the repositories block, make sure you have your local Maven repository listed:
+
+    repositories {
+      mavenLocal()
+    }
+
+And then just add the following to your dependencies block:
+
+    dependencies {
+      mlBundle "graph.x.ql:graphXql:1.0.0-SNAPSHOT"
+    }
+
+This assumes that the version of the artifacts you published above is 1.0.0-SNAPSHOT. You can find the version number by looking at the version property in gradle.properties in your cloned copy of GraphXQL. 
 
 Next, run the following commands:
 
 ```shell
 ./gradlew mlReloadSchemas
 ```
-
-Deploy XSD schemas required to define the types used internally by the library
+This will deploy the XSD schemas required to define the types used internally by the GraphQL library
 
 ```shell
 ./gradlew mlReloadModules
 ```
-
-Deploy the actual library, which includes the graphql service as a Marklogic Rest extension :smile:
+This will load all modules, including those coming from the GraphQL library, including the graphql service as a Marklogic Rest extension :smile:
 
 ```shell
 ./gradlew mlLoadData
 ```
-
-Deploy the introspection graqhXql schema
+This deploys the introspection graqhXql schema. You will also need to run this command when you create or modify your own graqhXql schema. (see below)
 
 ### Setup
 
@@ -217,7 +227,7 @@ publishing {
 
 ## Contributing
 
-This library is still in a fairly early stages, if you'd like to contribute, please fork the repository and use a feature branch.
+This library is still in a fairly early stage, if you'd like to contribute, please fork the repository and use a feature branch.
 
 Pull requests are warmly welcome.
 
