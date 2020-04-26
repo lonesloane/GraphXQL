@@ -1,13 +1,8 @@
 
 buildscript {
   repositories {
-    maven { 
-      url "https://dev-entrep-1/nexus/content/repositories/Gradle-OECD/" 
-      credentials {
-        username "$mavenUser"
-        password "$mavenPassword"
-      }
-    }
+    jcenter {url "https://jcenter.bintray.com/"}
+    maven {url "http://developer.marklogic.com/maven2/"}
   }
   dependencies {
     classpath "com.marklogic:marklogic-unit-test-client:1.0.beta"
@@ -21,13 +16,8 @@ plugins {
 
 repositories {
     mavenLocal()
-    maven { 
-      url "https://dev-entrep-1/nexus/content/repositories/Gradle-OECD/" 
-      credentials {
-        username "$mavenUser"
-        password "$mavenPassword"
-      }
-    }
+    jcenter {url "https://jcenter.bintray.com/"}
+    maven {url "http://developer.marklogic.com/maven2/"}
 }
 
 dependencies {
@@ -72,13 +62,7 @@ artifacts {
 
 publishing {
     repositories {
-        maven {
-            url = { "https://dev-entrep-1/nexus/content/repositories/$repo/" }
-            credentials {
-                username "$mavenUser"
-                password "$mavenPassword"
-            }
-        }
+      mavenLocal()
     }
     publications {
         pluginPublication (MavenPublication) {

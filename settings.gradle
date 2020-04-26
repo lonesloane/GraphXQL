@@ -1,13 +1,9 @@
 pluginManagement {
     repositories {
         mavenLocal()
-        maven { 
-            url "https://dev-entrep-1/nexus/content/repositories/Gradle-OECD/" 
-            credentials {
-                username "$mavenUser"
-                password "$mavenPassword"
-            }
-        }
+        jcenter {url "https://jcenter.bintray.com/"}
+        maven {url "http://developer.marklogic.com/maven2/"}
+        gradlePluginPortal()
     }
 }
 rootProject.name = 'graphXql'
