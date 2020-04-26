@@ -22,7 +22,7 @@ To expose a GraphXQL service in your project, the recommended way is to import t
 
 ### Adding GraphXQL to your project
 
-Assuming you're using ml-gradle, you can easily add a grphQL service to your application.
+Assuming you're using ml-gradle, you can easily add a graphQL service to your application.
 
 As this project hasn't been published to the [jcenter](https://bintray.com/bintray/jcenter) repository yet, you'll first
 need to publish a copy of this project to your local Maven repository, which defaults to ~/.m2/repository. 
