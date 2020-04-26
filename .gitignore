@@ -1,3 +1,57 @@
+CHANGELOG.mdown
+CONTRIBUTING.md
+license.txt
+README.mdown
+version.txt
+.DS_Store
+local.properties
+*.tmproj
+Thumbs.db
+.project
+.settings/
+*.sublime*
+!.git*
+log.txt
+Data/
+.idea/
+*.iml
+caches/
+
+# Created by https://www.gitignore.io/api/gradle,visualstudiocode
+# Edit at https://www.gitignore.io/?templates=gradle,visualstudiocode
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+
+### Gradle ###
+.gradle
+build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
+# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
+# gradle/wrapper/gradle-wrapper.properties
+
+### Gradle Patch ###
+**/build/
+
+# End of https://www.gitignore.io/api/gradle,visualstudiocode
+
 .gradle/
 build/
 gradle/
