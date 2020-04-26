@@ -148,7 +148,7 @@ If everything is setup correctly, the above code should return
 }
 ```
 
-Also, if you are working with a client application such as GraphiQL or Insomnia, you should also benefit from the introspection and have access to all the types exposed by your service.
+When working with a client application such as GraphiQL or Insomnia, you should also benefit from the introspection and have access to all the types exposed by your service.
 
 [![Introspection](docs/screenshots/introspection.png)](docs/screenshots/introspection.png)
 [![Query](docs/screenshots/query.png)](docs/screenshots/query.png)
